@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Molecular Genetics Study Tool</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface-2: #334155;
+    --border: #475569;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --primary: #3b82f6;
+    --primary-hover: #2563eb;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  header {
+    background: linear-gradient(135deg, #1e3a8a, #312e81);
+    padding: 1.5rem 2rem;
+    border-bottom: 2px solid var(--border);
+  }
+  header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+  header p { color: #cbd5e1; font-size: 0.9rem; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 1.5rem 2rem; }
+  nav.tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.75rem;
+  }
+  nav.tabs button {
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+  }
+  nav.tabs button:hover { background: var(--surface-2); }
+  nav.tabs button.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+  }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .card h2 { font-size: 1.2rem; margin-bottom: 0.75rem; color: #93c5fd; }
+  .card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #bfdbfe; }
+  .settings-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+  .settings-row label { font-size: 0.85rem; color: var(--muted); min-width: 100px; }
+  input[type="text"], textarea, select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    flex: 1;
+    min-width: 200px;
+  }
+  textarea { resize: vertical; min-height: 120px; width: 100%; line-height: 1.5; }
+  button.btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background 0.15s;
+  }
+  button.btn:hover:not(:disabled) { background: var(--primary-hover); }
+  button.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  button.btn.secondary { background: var(--surface-2); }
+  button.btn.secondary:hover:not(:disabled) { background: var(--border); }
+  button.btn.success { background: var(--success); }
+  button.btn.danger { background: var(--danger); }
+  .status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+  .status.ok { background: rgba(34,197,94,0.2); color: #4ade80; }
+  .status.err { background: rgba(239,68,68,0.2); color: #f87171; }
+  .status.wait { background: rgba(245,158,11,0.2); color: #fbbf24; }
+  .question-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .question-text { margin-bottom: 1rem; white-space: pre-wrap; font-size: 1rem; }
+  .options { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1rem; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .option:hover { border-color: var(--primary); }
+  .option.selected { border-color: var(--primary); background: rgba(59,130,246,0.1); }
+  .option.correct { border-color: var(--success); background: rgba(34,197,94,0.1); }
+  .option.incorrect { border-color: var(--danger); background: rgba(239,68,68,0.1); }
+  .option-letter { font-weight: bold; color: var(--primary); min-width: 1.5rem; }
+  .option-text { flex: 1; font-size: 0.9rem; }
+  .feedback {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+  }
+  .feedback.correct { background: rgba(34,197,94,0.1); border-left: 4px solid var(--success); }
+  .feedback.incorrect { background: rgba(239,68,68,0.1); border-left: 4px solid var(--danger); }
+  .feedback.info { background: rgba(59,130,246,0.1); border-left: 4px solid var(--primary); }
+  .feedback.warn { background: rgba(245,158,11,0.1); border-left: 4px solid var(--warning); }
+  .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+  .progress {
+    background: var(--surface-2);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--primary);
+    transition: width 0.3s;
+  }
+  .score-badge {
+    display: inline-block;
+    background: var(--surface-2);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+  }
+  .diagram-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .diagram-btn {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.85rem;
+    transition: all 0.15s;
+  }
+  .diagram-btn:hover { background: var(--border); transform: translateY(-1px); }
+  .diagram-container {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    overflow-x: auto;
+  }
+  .diagram-container svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .kv-list { list-style: none; padding-left: 0; }
+  .kv-list li {
+    padding: 0.4rem 0;
+    padding-left: 1.25rem;
+    position: relative;
+    font-size: 0.9rem;
+  }
+  .kv-list li::before { content: "•"; position: absolute; left: 0; color: var(--primary); }
+  details {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin-top: 0.75rem;
+  }
+  details summary { cursor: pointer; color: var(--primary); font-weight: 500; }
+  details[open] summary { margin-bottom: 0.5rem; }
+  code { background: var(--bg); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85rem; }
+  .mono { font-family: 'SF Mono', Menlo, monospace; font-size: 0.85rem; }
+  .help-text { font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+  /* STUDY SECTION STYLES */
+  .study-controls {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .study-controls .filter-btn {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.15s;
+  }
+  .study-controls .filter-btn:hover { background: var(--border); }
+  .study-controls .filter-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+  }
+  .study-controls input[type="text"] {
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
+  }
+  .study-count {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-left: auto;
+  }
+  .study-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+    transition: border-color 0.15s;
+  }
+  .study-item:hover { border-color: var(--primary); }
+  .study-item-header {
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    user-select: none;
+  }
+  .study-item-header:hover { background: rgba(59,130,246,0.05); }
+  .study-item-num {
+    background: var(--primary);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .study-item-info { flex: 1; min-width: 0; }
+  .study-item-topic {
+    font-size: 0.75rem;
+    color: var(--primary);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+  }
+  .study-item-question {
+    font-size: 0.95rem;
+    color: var(--text);
+    white-space: pre-wrap;
+    line-height: 1.5;
+  }
+  .study-item-toggle {
+    font-size: 1.2rem;
+    color: var(--muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+  }
+  .study-item.open .study-item-toggle { transform: rotate(180deg); }
+  .study-item-body {
+    display: none;
+    padding: 0 1.25rem 1.25rem 1.25rem;
+    border-top: 1px solid var(--border);
+    margin-top: 0.5rem;
+  }
+  .study-item.open .study-item-body { display: block; }
+  .study-answer {
+    background: rgba(34,197,94,0.08);
+    border-left: 3px solid var(--success);
+    padding: 1rem 1.25rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+  .study-answer h4 {
+    color: var(--success);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+  }
+  .study-answer .answer-content {
+    white-space: pre-wrap;
+    line-height: 1.6;
+    color: #d1fae5;
+  }
+  .study-answer pre {
+    background: rgba(0,0,0,0.3);
+    padding: 0.75rem;
+    border-radius: 4px;
+    overflow-x: auto;
+    font-size: 0.82rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: #d1fae5;
+  }
+  .study-options-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.75rem 0 0 0;
+  }
+  .study-options-list li {
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.35rem;
+    background: var(--bg);
+    border-radius: 6px;
+    font-size: 0.88rem;
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+  .study-options-list li.correct-answer {
+    background: rgba(34,197,94,0.15);
+    border-left: 3px solid var(--success);
+  }
+  .study-options-list .opt-letter {
+    font-weight: bold;
+    color: var(--primary);
+    min-width: 1.2rem;
+  }
+  .study-options-list li.correct-answer .opt-letter { color: var(--success); }
+  .study-options-list li.correct-answer::after {
+    content: "✓";
+    color: var(--success);
+    font-weight: bold;
+    margin-left: auto;
+  }
+  .study-section-header {
+    margin: 2rem 0 1rem 0;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(90deg, var(--primary), transparent);
+    border-radius: 6px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .study-section-header:first-of-type { margin-top: 0; }
+  .study-controls .btn-sm {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+  .study-controls .btn-sm:hover { background: var(--border); }
+
+  /* Make study question images responsive */
+  .study-item-question img,
+  .question-text img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0.5rem 0;
+    border-radius: 6px;
+    background: #fff;
+  }
+
+  @media (max-width: 640px) {
+    .container { padding: 1rem; }
+    .two-col { grid-template-columns: 1fr; }
+    .study-controls { flex-direction: column; align-items: stretch; }
+    .study-count { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🧬 Molecular Genetics Study Tool</h1>
+  <p>Powered by Ollama · Practice MC, short & long answer questions · Auto-generated diagrams</p>
+</header>
+
+<div class="container">
+
+  <!-- Settings bar -->
+  <div class="card">
+    <h2>⚙️ Ollama Connection</h2>
+    <div class="settings-row">
+      <label>Server URL</label>
+      <input type="text" id="ollamaUrl" value="http://localhost:11434" />
+    </div>
+    <div class="settings-row">
+      <label>Model</label>
+      <input type="text" id="ollamaModel" value="llama3.2" placeholder="e.g. llama3.2, mistral, gemma2" />
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="testConnection()">Test Connection</button>
+      <span id="connStatus" class="status wait">Not checked</span>
+    </div>
+    <p class="help-text">
+      ⚠️ Ollama must allow browser requests. Start it with:<br>
+      <code>OLLAMA_ORIGINS=* ollama serve</code> (macOS/Linux)<br>
+      <code>set OLLAMA_ORIGINS=* &amp;&amp; ollama serve</code> (Windows)
+    </p>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="tabs">
+    <button data-tab="study">📚 Study</button>
+    <button data-tab="mc">📝 Multiple Choice</button>
+    <button data-tab="sa">✍️ Short Answer</button>
+    <button data-tab="la">📄 Long Answer</button>
+    <button data-tab="diagrams">📊 Diagrams</button>
+    <button data-tab="quiz">🎯 Full Quiz</button>
+    <button data-tab="score">🏆 Score</button>
+  </nav>
+
+  <!-- ============================================================
+       STUDY PANEL
+       ============================================================ -->
+  <div id="panel-study" class="panel active">
+    <div class="card">
+      <h2>📚 Study All Questions & Answers</h2>
+      <p class="help-text" style="margin-bottom:1rem;">
+        Browse every question with its answer. Click any question to reveal the answer.
+        Use the filters and search to focus on a topic.
+      </p>
+      <div class="study-controls">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="mc">📝 Multiple Choice</button>
+        <button class="filter-btn" data-filter="sa">✍️ Short Answer</button>
+        <button class="filter-btn" data-filter="la">📄 Long Answer</button>
+        <input type="text" id="studySearch" placeholder="Search question text or topic..." />
+        <button class="btn-sm" onclick="expandAllStudy()">Expand All</button>
+        <button class="btn-sm" onclick="collapseAllStudy()">Collapse All</button>
+        <span class="study-count" id="studyCount"></span>
+      </div>
+      <div id="studyList"></div>
+    </div>
+  </div>
+
+  <!-- MC Panel -->
+  <div id="panel-mc" class="panel">
+    <div class="card">
+      <h2>Multiple Choice Practice</h2>
+      <div class="settings-row">
+        <label>Topic</label>
+        <select id="mcTopic"><option value="">All topics</option></select>
+        <button class="btn" onclick="startMC()">Start</button>
+      </div>
+      <div id="mcContent"></div>
+    </div>
+  </div>
+
+  <!-- SA Panel -->
+  <div id="panel-sa" class="panel">
+    <div class="card">
+      <h2>Short Answer Practice</h2>
+      <div class="settings-row">
+        <label>Topic</label>
+        <select id="saTopic"><option value="">All topics</option></select>
+        <button class="btn" onclick="startSA()">Start</button>
+      </div>
+      <div id="saContent"></div>
+    </div>
+  </div>
+
+  <!-- LA Panel -->
+  <div id="panel-la" class="panel">
+    <div class="card">
+      <h2>Long Answer Practice</h2>
+      <div class="settings-row">
+        <label>Topic</label>
+        <select id="laTopic"><option value="">All topics</option></select>
+        <button class="btn" onclick="startLA()">Start</button>
+      </div>
+      <div id="laContent"></div>
+    </div>
+  </div>
+
+  <!-- Diagrams Panel -->
+  <div id="panel-diagrams" class="panel">
+    <div class="card">
+      <h2>Study Diagrams</h2>
+      <p class="help-text">Click any diagram to render it below.</p>
+      <div id="diagramGrid" class="diagram-grid"></div>
+      <div id="diagramOutput"></div>
+    </div>
+  </div>
+
+  <!-- Quiz Panel -->
+  <div id="panel-quiz" class="panel">
+    <div class="card">
+      <h2>Full Practice Quiz</h2>
+      <p>Random mix: 5 multiple choice · 2 short answer · 1 long answer.</p>
+      <div class="actions">
+        <button class="btn" onclick="startFullQuiz()">Begin Quiz</button>
+        <button class="btn secondary" onclick="resetQuiz()">Reset</button>
+      </div>
+      <div id="quizContent"></div>
+    </div>
+  </div>
+
+  <!-- Score Panel -->
+  <div id="panel-score" class="panel">
+    <div class="card">
+      <h2>Score Summary</h2>
+      <div id="scoreContent"></div>
+      <div class="actions">
+        <button class="btn danger" onclick="resetAllScores()">Reset Scores</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   QUESTIONS DATABASE
+   ============================================================ */
+const QUESTIONS = {
+  mc: [
+    { id:"mc1", topic:"DNA Replication", q:"All DNA polymerases synthesize new DNA by adding nucleotides to the _____ of the growing DNA chain.",
+      options:{a:"3'-OH", b:"5'-OH", c:"3'-phosphate", d:"5'-phosphate", e:"nitrogenous base"},
+      answer:"a", explanation:"DNA polymerases add nucleotides to the 3'-OH group. Synthesis proceeds 5'→3'." },
+    { id:"mc2", topic:"Transcription",
+      q:"What is the RNA sequence transcribed from this DNA?<br><br><img src=\"https://cdn.discordapp.com/attachments/1462856657510990047/1555267756465717369/Screenshot_2026-10-01_at_1.18.36_PM.png?backend=b2&ex=6ac138f8&is=6abfe778&hm=83a126dcc9f0984ffa180880bbf1a4d6266ecc0878c88aa7108e0395f7a2b7ce&\" alt=\"Transcription question DNA sequence\" />",
+      options:{a:"5'-CCGTATAATGA-3'", b:"3'-GGCATATTACT-5'", c:"5'-GGCAAUUAACA-3'", d:"5'-CCGUAUAAUGA-3'", e:"3'-GGCAAUUAUCU-5'"},
+      answer:"d", explanation:"RNA is complementary to the template (bottom) strand, synthesized 5'→3'. Starting at +1: CCGTATAATGA → CCGUAUAAUGA." },
+    { id:"mc3", topic:"Gene Regulation",
+      q:"Which is the best method to demonstrate the function of a putative enhancer?",
+      options:{
+        a:"Compare DNA sequences from two or more species and identify conserved regions outside coding regions.",
+        b:"Introduce two separate pieces of DNA into a eukaryotic cell; one has the putative enhancer, the other a reporter gene.",
+        c:"Insert the putative enhancer into a promoter::reporter construct, introduce into eukaryotic cells, and measure reporter expression.",
+        d:"Insert the putative enhancer into a reporter construct and measure reporter expression in a prokaryotic cell.",
+        e:"Crosslink genomic DNA and proteins, fragment DNA, immunoprecipitate, and sequence."},
+      answer:"c", explanation:"Directly test enhancer function by fusing it to a promoter::reporter and measuring expression in eukaryotes." },
+    { id:"mc4", topic:"PCR Primer Design",
+      q:"Choose the primer pair that amplifies the DNA shown.\n\n5'-GACCTGTGGAAGC------CATACGGGATTGA-3'\n3'-CTGGACACCTTCG------GTATGCCCTAACT-5'\n\n(1) 5'-GACCTGTGGAAGC-3'\n(2) 5'-CTGGACACCTTCG-3'\n(3) 5'-CGAAGGTGTCCAG-3'\n(4) 5'-GCTTCCACAGGTC-3'\n(5) 5'-CATACGGGATTGA-3'\n(6) 5'-GTATGCCCTAACT-3'\n(7) 5'-TGTTAGGGCATAC-3'\n(8) 5'-TCAATCCCGTATG-3'",
+      options:{a:"2 and 7", b:"1 and 8", c:"4 and 5", d:"3 and 6"},
+      answer:"b", explanation:"Forward (1) matches top strand 5' end. Reverse (8) is complementary to bottom strand 3' end." },
+    { id:"mc5", topic:"PCR",
+      q:"Typical PCR cycle graph shows regions at 55°C (A), 72°C (B), 95°C (C). What do A, B, C represent?",
+      options:{
+        a:"A: denaturation; B: annealing; C: extension",
+        b:"A: primer annealing; B: extension; C: denaturation",
+        c:"A: denaturation; B: extension; C: annealing",
+        d:"A: extension; B: denaturation; C: annealing",
+        e:"A: extension; B: annealing; C: extension"},
+      answer:"b", explanation:"55°C = annealing, 72°C = extension by Taq, 95°C = denaturation." },
+    { id:"mc6", topic:"qPCR",
+      q:"qPCR amplification: Sample 1 crosses threshold at ~15 cycles; Sample 2 at ~25. Which has more DNA and by how much?",
+      options:{a:"~2-fold higher in sample 1", b:"~1000-fold higher in sample 1", c:"~2-fold higher in sample 2", d:"~1000-fold higher in sample 2"},
+      answer:"b", explanation:"ΔCt ≈ 10 cycles → 2¹⁰ ≈ 1024, roughly 1000-fold more in Sample 1." },
+    { id:"mc7", topic:"Chromatin",
+      q:"When regions around genes become sensitive to DNase I, this indicates those regions are:",
+      options:{a:"becoming transcriptionally active", b:"becoming highly methylated at cytosine", c:"becoming more condensed", d:"forming heterochromatin"},
+      answer:"a", explanation:"DNase I hypersensitivity = open chromatin = transcriptionally active." },
+    { id:"mc8", topic:"Histone Modifications",
+      q:"Methylated histone tail amino acids are associated with chromatin that is:",
+      options:{a:"open only", b:"either open or closed", c:"newly replicated", d:"closed only", e:"about to replicate"},
+      answer:"b", explanation:"Histone methylation can activate or repress depending on which residue (e.g. H3K4me = active; H3K9me = repressed)." },
+    { id:"mc9", topic:"EMSA",
+      q:"A researcher performs EMSA. Which result provides the STRONGEST evidence of specific transcription factor–DNA binding?",
+      options:{
+        a:"Probe forms a slower-migrating band with protein, and band disappears with excess unlabeled identical DNA",
+        b:"Probe migrates faster when protein is added",
+        c:"Probe forms a faster-migrating band with excess unlabeled DNA",
+        d:"Protein produces a band at the same position as free probe"},
+      answer:"a", explanation:"Slower migration + competition by unlabeled identical probe = specific binding." },
+    { id:"mc10", topic:"mRNA Processing",
+      q:"The 5' and 3' UTRs of processed mRNA are derived from:",
+      options:{a:"promoters", b:"terminators", c:"protein-coding region", d:"exons", e:"introns"},
+      answer:"d", explanation:"UTRs are exon sequences flanking the ORF within mature mRNA." },
+    { id:"mc11", topic:"mRNA Processing",
+      q:"In eukaryotic mRNA processing, ______ cap and ______ tail are added.",
+      options:{a:"a methylated guanine; a poly-A", b:"an acetylated guanine; a poly-C", c:"a poly-G; a methyl group", d:"a poly-T; an acetyl group", e:"a methylated adenine; a poly-G"},
+      answer:"a", explanation:"7-methylguanosine cap at 5' end; poly(A) tail at 3' end." },
+    { id:"mc12", topic:"RNA Splicing",
+      q:"Chicken ovalbumin mRNA hybridized to denatured genomic DNA. EM reveals loops. Which is TRUE?",
+      options:{a:"loop at 'c' is a large exon", b:"pointer 'a' identifies DNA", c:"loop at 'b' represents an intron", d:"solid line represents mRNA"},
+      answer:"c", explanation:"Loops = introns (present in DNA, absent in mature mRNA)." },
+    { id:"mc13", topic:"Transcription",
+      q:"DNA: 5'-GGACTAGACAATAGGGACCTAGAGATTCCGAAA-3'\nRNA:  5'-GGACUAGACAAUAGGGACCUAGAGAUUCCGAAA-3'\nWhich best describes transcription?",
+      options:{
+        a:"Top strand is template; RNAP moves 5'→3'",
+        b:"Top strand is template; RNAP moves 3'→5'",
+        c:"Bottom strand is template; RNAP moves 5'→3'",
+        d:"Bottom strand is template; RNAP moves 3'→5'"},
+      answer:"d", explanation:"RNA matches the top strand (U for T) → bottom is template. RNAP reads template 3'→5'." },
+    { id:"mc14", topic:"PCR Primer Design",
+      q:"Primer: 5'-TACGATGACCTGATCGTACGG-3'. Wallace Tm?",
+      options:{a:"56°C", b:"64°C", c:"66°C", d:"60°C", e:"62°C"},
+      answer:"b", explanation:"Count: A=4,T=4,G=7,C=5. Tm = 2(8)+4(12) = 16+48 = 64°C." },
+    { id:"mc15", topic:"qPCR",
+      q:"qPCR with A) 1.8 ng, B) 0.7 ng, C) 0.2 ng template. Ct from A→B→C will:",
+      options:{a:"decrease", b:"increase", c:"stay same"},
+      answer:"b", explanation:"Less template → more cycles needed → higher Ct." },
+    { id:"mc16", topic:"DNA Properties",
+      q:"Which best describes the three essential properties of DNA as genetic material?",
+      options:{
+        a:"Produce energy, replicate only in reproductive cells, remain identical in all individuals",
+        b:"Remain unchanged, produce proteins directly, rapidly mutate in response to environment",
+        c:"Replicate accurately, contain expressible information, undergo occasional changes for variation",
+        d:"Translate into protein, prevent mutations, be transmitted only through cytoplasm"},
+      answer:"c", explanation:"Replication + expression + mutability = the three required properties." },
+    { id:"mc17", topic:"PCR Primer Design",
+      q:"Amplify a CFTR gene region with 25-bp end segments. Which primer pair works?",
+      options:{
+        a:"3'-TACGAAACCACCCTTCTTC-5' and 5'-TCGTAATTATCCACAGGTT-3'",
+        b:"5'-ATGCTTTGGTGGGAAGAAG-3' and 5'-TTGGACACCTATTAATGCT-3'",
+        c:"5'-ATGCTTTGGTGGGAAGAAG-3' and 5'-AACCTGTGGATAATTACGA-3'",
+        d:"5'-ATGCTTTGGTCCCAAGAAG-3' and 5'-TCGTAATTATCCACAGGTT-3'"},
+      answer:"c", explanation:"Forward matches top strand 5' end; reverse is reverse-complement of bottom strand 3' end." },
+    { id:"mc18", topic:"Translation",
+      q:"In eukaryotes but NOT prokaryotes, ribosomes find the start site by:",
+      options:{a:"binding the promoter", b:"scanning from the 5' cap", c:"binding Shine-Dalgarno", d:"binding initiator tRNA"},
+      answer:"b", explanation:"Eukaryotic ribosome binds the 5' cap and scans to first AUG." },
+    { id:"mc19", topic:"Reporter Genes",
+      q:"GUS reporter fused to upstream fragments. High expression with -600/-400 + -100/+1; basal with just -100/+1. What do these regions contain?",
+      options:{a:"Promoter: -100/+1; Enhancer: -600/-400", b:"Promoter: -600/-400; Enhancer: -100/+1", c:"Promoter: -700/-500; Enhancer: -400/-200", d:"Promoter: -200/-100; Enhancer: -700/-600"},
+      answer:"a", explanation:"-100/+1 supports basal transcription (promoter). -600/-400 boosts expression (enhancer)." },
+    { id:"mc20", topic:"EMSA",
+      q:"EMSA with Foot A probe + HepG2 nuclear extract. Supershift with HNF-4α/γ antibodies but not HNF-1α/β. What does this show?",
+      options:{a:"HNF-4 binds Foot A specifically", b:"HNF-1 binds Foot A specifically", c:"No protein binds Foot A", d:"Both bind equally"},
+      answer:"a", explanation:"Supershift with anti-HNF-4 confirms HNF-4 is in the Foot A complex." }
+  ],
+
+  sa: [
+    { id:"sa1", topic:"Genetic Material",
+      q:"List three characteristics required of genetic material. For each, indicate how the structure of DNA helps us understand the characteristic.",
+      answerKey:
+`1. Must contain complex information to encode all functions of an organism (phenotypes).
+   → DNA molecules are very long and 4 base pairs can occur in any sequence, so DNA stores large amounts of information as nucleotide sequence.
+
+2. Must be copied accurately for reproduction.
+   → Double helix (Watson & Crick) suggested semiconservative replication. Two strands separate; each parental strand acts as a template for the new strand via complementary base pairing.
+
+3. Must be able to vary in base sequence (mutable).
+   → Nucleotides can change during replication to allow variation.`,
+      keywords:["complex information","base sequence","replication","semiconservative","complementary base pairing","template","mutable","variation"]
+    },
+    { id:"sa2", topic:"mRNA Processing",
+      q:"Name the three major modifications of eukaryotic mRNA nascent transcripts before transport to the cytoplasm. Describe the purpose of each.",
+      answerKey:
+`1. 5' cap (methylated guanine) → protects RNA from degradation; required for translation.
+2. Poly(A) tail added to 3' end → protective; important for efficient translation.
+3. RNA splicing → removes introns, generates open reading frame for the ribosome.`,
+      keywords:["5' cap","methylated guanine","protection","translation","poly(A) tail","3' end","splicing","introns","exons","open reading frame"]
+    },
+    { id:"sa3", topic:"Histones",
+      q:"Histones are among the most conserved proteins in nature (histone H4 in cows vs peas differs by only 2 amino acids despite >1 billion years divergence). Yet histones also function in precise, tissue-specific gene regulation. Reconcile these two facts.",
+      answerKey:
+`Histones are involved in fundamental DNA compaction through non-specific protein–DNA interactions. This ancient function requires highly conserved histones, so amino acid substitutions in the core are not tolerated (lethal).
+
+However, the N-terminal tails of histones are subject to post-translational modifications (acetylation, methylation, phosphorylation, etc.). These modifications can be locus-specific based on recruitment of co-activators/co-repressors containing histone writers and erasers. Modifications are recognized by histone readers and have specific effects on local gene expression (affecting nucleosome binding and recruiting chromatin-remodeling complexes).`,
+      keywords:["DNA compaction","nucleosome","non-specific","N-terminal tails","post-translational modifications","acetylation","methylation","writers","erasers","readers","gene expression"]
+    },
+    { id:"sa4", topic:"EMSA vs ChIP",
+      q:"Compare and contrast EMSA and ChIP for studying sequence-specific protein–DNA interactions. Include at least one control for each, and state advantages/disadvantages of each.",
+      answerKey:
+`EMSA: Makes use of a labelled DNA fragment incubated with purified protein and binding is observed through a shift in the mobility of the protein-DNA complex relative to DNA alone and it controls DNA probe alone.
+ChIP: crosslink DNA-protein complexes in living cells, fragment chromatin, immunoprecipitate with antibody, purify DNA, measure target region by PCR/qPCR. A control would be designing primers against non-target regions.
+
+Advantages/Disadvantages:
+- EMSA: easy and rapid (advantage), but in vitro with free DNA that may not reflect chromatin in vivo (disadvantage).
+- ChIP: in vivo technique capturing real interactions; can examine many sites (advantage), but requires more reagents (expensive) and a specific antibody (disadvantage).`,
+      keywords:["EMSA","gel shift","labeled probe","mobility shift","competitor","supershift","ChIP","crosslink","immunoprecipitate","in vitro","in vivo","antibody"]
+    },
+    { id:"sa5", topic:"Dimerization",
+      q:"Many transcription regulators form dimers of identical or slightly different subunits. Suggest two advantages of dimerization.",
+      answerKey:
+`1. Binding affinity is usually higher because the number of contacts with DNA is doubled vs a monomer.
+2. Combinatorial pairing of different subunits increases the number of DNA-binding specificities available to the cell.`,
+      keywords:["binding affinity","contacts","DNA","combinatorial","specificity","subunits"]
+    },
+    { id:"sa6", topic:"STR Analysis",
+      q:"An STR locus (OTG) repeats GATA. Flanking DNA is 25 bp each side.\n5'-...TTCACCGGAG [GATA]n GTTGGTGATGAGATTGGTGAGGCTT-3'\n\na) Design 20-nt PCR primers flanking the repeats.\nb) Calculate Tm (Wallace).\nc) Predict amplicon sizes for alleles with 12 and 15 repeats.",
+      answerKey:
+`a) Forward: 5'-GACGATTCTTGTTCACCGGAG-3'
+   Reverse: 5'-CTACCAATCTCATCACCAAC-3'
+
+b) Wallace Tm = 2°C(A+T) + 4°C(G+C)
+   Primer 1: Tm = 2(9) + 4(11) = 62°C
+   Primer 2: Tm = 2(11) + 4(9) = 58°C
+
+c) Allele with 12 repeats: 20 + 12×4 + 20 = 88 bp
+   Allele with 15 repeats: 20 + 15×4 + 20 = 100 bp`,
+      keywords:["primer","GATA","flanking","melting temperature","Tm","base pairs","allele"]
+    },
+    { id:"sa7", topic:"SAGA Complex",
+      q:"SAGA is a yeast coactivator complex. ChIP with anti-Spt3 and anti-Spt20 antibodies shows strong enrichment at the UAS (fragment B) in galactose-grown vs raffinose-grown cells.\n\na) Which fragments would you expect enriched if SAGA acts as a coactivator?\nb) Does SAGA meet coactivator criteria?",
+      answerKey:
+`a) If SAGA bridges GAL4 (at UAS) with basal transcription factors at promoters, fragment B (containing the UAS) would be enriched — observed 2-3 fold in galactose. Fragment C (promoter where basal machinery assembles) might also show some enrichment.
+
+b) SAGA minimally meets coactivator criteria: present at UAS in galactose, absent in raffinose. Additional experiments are needed for full validation. The presence of a histone acetyltransferase and TAFs supports coactivator function.`,
+      keywords:["fragment B","UAS","GAL4","enrichment","galactose","raffinose","coactivator","promoter","basal transcription"]
+    },
+    { id:"sa8", topic:"Promoters vs Enhancers",
+      q:"Compare and contrast promoters and enhancers in eukaryotic transcription. Discuss positions relative to the TSS, how they operate, and their roles.",
+      answerKey:
+`Both are DNA sequences that regulate transcription and are needed for high-level expression.
+
+Promoters: located just upstream of the TSS; must be in a specific orientation. Include core promoter (binds basal apparatus incl. RNA polymerase) and regulatory promoter (binds additional TFs). Core alone gives low basal transcription.
+
+Enhancers: located near or far, upstream or downstream. Regulatory proteins bind enhancers and interact with the transcription apparatus at a promoter via DNA looping. Because they act at various distances/positions, many enhancers can act on a single gene, allowing responsiveness to diverse signals.`,
+      keywords:["promoter","enhancer","transcription start site","core promoter","regulatory promoter","basal transcription apparatus","RNA polymerase","orientation","position","upstream","downstream"]
+    },
+    { id:"sa9", topic:"DNA Bending Proteins",
+      q:"Some transcriptional regulators bind DNA and sharply bend the double helix, affecting transcription without contacting any other protein. Propose an explanation.",
+      answerKey:
+`Bending proteins bring distant DNA regions into proximity that would otherwise contact each other only rarely, increasing the local concentration of transcriptional regulators near RNA polymerase holoenzyme. Examples: LEF-1, SRY1, YY1 in eukaryotes.`,
+      keywords:["bending","distant DNA regions","local concentration","transcriptional regulators","RNA polymerase","LEF-1","SRY1","YY1"]
+    },
+    { id:"sa10", topic:"mRNA Purification",
+      q:"Explain the rationale for using oligo(dT) cellulose columns to purify mature mRNA.",
+      answerKey:
+`Mature eukaryotic mRNA has a poly(A) tail of adenine bases added during processing. The oligo(dT) column contains complementary thymine residues attached to a cellulose matrix. When total RNA passes through, the poly(A) tail of mRNA hybridizes to the dT, while rRNA and other non-polyadenylated RNAs flow through. Purified mRNA is then eluted.`,
+      keywords:["poly(A) tail","3' end","oligo(dT)","complementary","thymine","adenine","rRNA","purification"]
+    },
+    { id:"sa11", topic:"qPCR",
+      q:"In real-time qPCR, what is the threshold cycle (Ct)?",
+      answerKey:
+`The Ct is the PCR cycle at which the fluorescence signal crosses a defined threshold above the background. It is determined by the starting template amount: high starting template → low Ct; low starting template → high Ct.`,
+      keywords:["threshold cycle","Ct","fluorescence","background","template","starting amount"]
+    },
+    { id:"sa12", topic:"qPCR",
+      q:"Sample A: Ct = 13. Sample B: Ct = 18. Which sample had more input DNA, and by how much? Explain.",
+      answerKey:
+`Sample A had more. ΔCt = 18 − 13 = 5 cycles. Each cycle doubles product, so 2⁵ = 32. Sample A had ~32× more input target than Sample B.`,
+      keywords:["Ct","delta Ct","doubling","2^5","32-fold","exponential"]
+    },
+    { id:"sa13", topic:"Transcription",
+      q:"Single-stranded template: ATTGCCAGATCATCCCAATAGAT. RNA polymerase moves left→right.\n\na) Which end is 5' and which is 3'?\nb) Give the RNA sequence with 5'/3' labels.",
+      answerKey:
+`a) RNAP reads template 3'→5', so moving left-to-right means the left end is 3':
+   3'-ATTGCAGATCATCCCAATAGAT-5'
+
+b) RNA is complementary (U replaces T), synthesized 5'→3':
+   5'-UAACGGUCUAGUAGGGUUAUCUA-3'`,
+      keywords:["3' to 5'","template","5' to 3'","RNA","complementary","U replaces T"]
+    },
+    { id:"sa14", topic:"PCR Primer Design",
+      q:"Design two 18-nt primers to amplify the central 40 bp of:\n5'-AGCTGGACCACTGATCATTGACTGCTAGCGTCAAGTCCTAGTAGACTGACG-3'\n3'-TCGACCTGGTGACTAGTAACTGACGATCGCAAGTCAGGATCATCTGACTGC-5'",
+      answerKey:
+`Forward: 5'-GACCACTGATCATTGACT-3'
+Reverse: 5'-GTCTACTAGGACTGACGC-3'`,
+      keywords:["forward primer","reverse primer","5'","3'","amplicon"]
+    },
+    { id:"sa15", topic:"Translation",
+      q:"DNA (no introns): 5'-ACATTCGATTACGAAGTGAACCCAGTTCTTCTCACAAATCATGGTAACCGCCTC-3'\nFind the ORF in the mRNA and translate it.",
+      answerKey:
+`mRNA ORF: 5'-AUG AUU UGU GAG AAG ACU GGG UUC ACU UCG UAA-3'
+Protein: N-Met-Ile-Cys-Glu-Lys-Thr-Gly-Phe-Thr-Ser-C`,
+      keywords:["AUG","start codon","UAA","stop codon","Met","Ile","Cys","Glu","Lys","Thr","Gly","Phe","Ser"]
+    },
+    { id:"sa16", topic:"Gene Definition",
+      q:"What is a gene? (Think about it before answering.)",
+      answerKey:
+`A gene is a segment of DNA carrying instructions for how an organism develops and functions — a unit of heredity. Structurally it includes a promoter, the transcribed region (open reading frame), and a terminator, and may include regulatory elements like enhancers.`,
+      keywords:["DNA segment","instructions","organism","develops","functions","heredity","promoter","open reading frame"]
+    },
+    { id:"sa17", topic:"Molecular Genetics",
+      q:"What is molecular genetics? (Think about it before answering.)",
+      answerKey:
+`The study of how genes function at the molecular level — DNA replication, transcription, and translation — typically relating genotypes to phenotypic consequences.`,
+      keywords:["genes","molecular level","DNA replication","transcription","translation","genotype","phenotype"]
+    }
+  ],
+
+  la: [
+    { id:"la1", topic:"DNA Properties",
+      q:"Explain the three key properties genetic material must possess. For each, describe how DNA's structure enables that function. Include chemical bonds and structural features that matter for each property.",
+      answerKey:
+`1. REPLICATION — must be copied accurately.
+   DNA's complementary base pairing (A-T, G-C) lets each strand serve as a template. Weak H-bonds break easily for strand separation; phosphodiester backbone provides stability and 5'→3' directionality. Semiconservative replication gives each daughter molecule one old and one new strand.
+
+2. GENE EXPRESSION — must contain complex information that can produce phenotype.
+   Four bases in any sequence store enormous information. The triplet code specifies amino acids. Promoters regulate when/where genes are expressed. DNA is transcribed to RNA and translated to protein.
+
+3. MUTABILITY — must be able to change occasionally for variation.
+   Replication errors, chemical damage, and environmental factors can alter nucleotide sequence. Most mutations are neutral or harmful; some are beneficial and provide raw material for natural selection.`
+    },
+    { id:"la2", topic:"Eukaryotic Gene Regulation",
+      q:"Compare and contrast core promoters, regulatory promoters, and enhancers. Discuss location, function, the proteins that bind them, and how they work together.",
+      answerKey:
+`CORE PROMOTER
+- Location: adjacent to gene; ~-40 to +40 relative to TSS.
+- Function: binds general transcription factors (GTFs) and RNA pol II.
+- Elements: TATA box (~-25), Inr (+1), BRE, DPE.
+- Proteins: TFIID (TBP binds TATA), TFIIA/B/E/F/H, Pol II.
+- Activity: low (basal), unregulated.
+
+REGULATORY PROMOTER
+- Location: upstream of core promoter (~-40 to -200).
+- Function: binds gene-specific transcription factors.
+- Elements: GC boxes, CAAT boxes, octamer elements.
+- Proteins: specific activators/repressors.
+- Activity: modulates transcription above/below basal.
+
+ENHANCERS
+- Location: far from gene (100s-1000s bp); upstream, downstream, or in introns.
+- Function: bind activators that interact with the promoter via DNA looping.
+- Properties: position- and orientation-independent.
+- Proteins: activator proteins + coactivators (Mediator).
+- Activity: greatly increase transcription; allow combinatorial regulation.
+
+Together, activators bound at enhancers recruit Mediator, which bridges to GTFs and Pol II at the core promoter, while regulatory promoter factors fine-tune expression.`
+    },
+    { id:"la3", topic:"Experimental Design",
+      q:"Design experiments to (1) identify TF-X's DNA binding site, (2) test in vivo binding, and (3) test whether binding affects transcription. Include controls and interpretation.",
+      answerKey:
+`EXPERIMENT 1: EMSA to identify binding site.
+- Label probes for candidate regions of target promoter. Incubate with TF-X. Run non-denaturing gel.
+- Controls: probe alone; +excess unlabeled identical probe (competition); +mutant unlabeled probe (specificity); +anti-TF-X antibody (supershift).
+- Interpret: shifted band = binding; competition confirms specificity; supershift confirms TF-X.
+- Follow with DNase I footprinting for precise mapping.
+
+EXPERIMENT 2: ChIP for in vivo binding.
+- Crosslink, sonicate, immunoprecipitate with anti-TF-X, reverse crosslinks, qPCR.
+- Controls: input; no-antibody; unrelated antibody; non-target primers; cells lacking tagged TF-X.
+- Interpret: enrichment of target region = TF-X binds in vivo.
+- ChIP-seq maps all sites genome-wide.
+
+EXPERIMENT 3: Reporter assay.
+- Clone promoter with WT / mutated / deleted binding site upstream of luciferase/GFP.
+- Transfect ± TF-X. Measure reporter.
+- Controls: no-promoter; constitutive promoter; empty vector; mutated site.
+- Interpret: increased/decreased reporter activity with WT site + TF-X indicates activation/repression; mutation abolishes the effect.
+- Validate with qRT-PCR of endogenous target.
+- CRISPR knockout of TF-X confirms requirement.`
+    },
+    { id:"la4", topic:"Chromatin",
+      q:"Describe mechanisms by which chromatin structure is modified to regulate eukaryotic gene expression: nucleosomes/histones, chromatin remodeling, histone modifications, DNA methylation, and how these are interpreted.",
+      answerKey:
+`NUCLEOSOMES & HISTONES
+- DNA wraps ~147 bp around histone octamers (H2A, H2B, H3, H4 ×2).
+- H1 binds linker DNA. Positive charges (Arg, Lys) attract DNA phosphates.
+- Nucleosomes repress transcription by blocking TF access.
+
+CHROMATIN REMODELING COMPLEXES
+- ATP-dependent (SWI/SNF, RSC) slide/eject/restructure nucleosomes.
+- Expose or hide DNA sequences dynamically.
+
+HISTONE MODIFICATIONS
+- Acetylation (HATs) neutralizes positive charge → opens chromatin (active).
+- Methylation (HMTs): H3K4me/H3K36me = active; H3K9me/H3K27me = repressed.
+- Phosphorylation (kinases) — H3S10ph → activation.
+- Ubiquitination — context-dependent.
+
+DNA METHYLATION
+- Cytosine methylation at CpG. Added by DNMTs.
+- Usually associated with repression.
+- CpG islands near promoters are unmethylated in active genes.
+- Recruits MeCP2/HDACs.
+
+INTERPRETATION (readers/writers/erasers)
+- Writers: HATs, HMTs, kinases.
+- Erasers: HDACs, demethylases.
+- Readers: bromodomains (Ac), chromodomains (Me), PHD fingers.
+
+ACTIVE vs REPRESSED
+- Active: open, DNase I hypersensitive, unmethylated CpG, acetylated histones, H3K4me3, Pol II bound.
+- Repressed: condensed, DNase I resistant, methylated CpG, deacetylated histones, H3K9me3/H3K27me3, HP1 bound.
+
+COORDINATION
+- Example activation: pioneer factors → SWI/SNF → HATs → TF binding → Pol II.
+- Example repression: HMTs → HP1 → HDACs → DNMTs → stable silencing.
+
+EPIGENETIC INHERITANCE
+- DNA methylation patterns copied by maintenance methyltransferases; histone marks propagated via read-write mechanisms.`
+    },
+    { id:"la5", topic:"qPCR",
+      q:"Design a qPCR experiment to measure a gene's expression response to a drug. Cover RNA isolation/cDNA synthesis, primer design, qPCR setup/controls, data analysis, pitfalls, and interpretation.",
+      answerKey:
+`1. RNA ISOLATION & cDNA
+- Grow control and treated cells; isolate total RNA (TRIzol/column).
+- DNase treat; assess quality (A260/A280 ~2.0).
+- Reverse transcribe with RT + oligo(dT)/random primers.
+- Include -RT control.
+
+2. PRIMER DESIGN
+- 18-24 nt; 40-60% GC; Tm 50-65°C; span exon-exon junction; product 80-200 bp.
+- Validate with standard curve (90-110% efficiency), melt curve, ±RT.
+
+3. qPCR SETUP
+- SYBR Green or TaqMan; dNTPs, polymerase, buffer, MgCl2.
+- Controls: NTC; -RT; standard curve; housekeeping genes (GAPDH, actin).
+- Technical triplicates; biological n≥3; same plate for all samples.
+
+4. DATA ANALYSIS
+- Standard curve (absolute) or ΔΔCt (relative).
+- ΔCt = Ct(target) - Ct(reference); ΔΔCt = ΔCt(treated) - ΔCt(control); Fold = 2^(-ΔΔCt).
+- Example: control Ct(target)=25, ref=20 → ΔCt=5. Treated Ct(target)=22, ref=20 → ΔCt=2. ΔΔCt=-3. Fold = 2³ = 8×.
+
+5. PITFALLS
+- Primer dimers → redesign, hot-start polymerase.
+- Non-specific amplification → TaqMan probes, melt curve.
+- Genomic DNA → DNase, exon-spanning primers, -RT control.
+- Reference variability → multiple reference genes.
+- Efficiency differences → standard curves.
+
+6. INTERPRETATION
+- Fold change >2 (or <0.5) + p<0.05 → significant effect.
+- Check dose-response; validate by Western blot.`
+    }
+  ]
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  score: { correct: 0, total: 0 },
+  currentMC: null,
+  currentSA: null,
+  currentLA: null,
+  quizMode: false,
+  studyFilter: 'all',
+  studySearch: ''
+};
+
+/* ============================================================
+   STUDY SECTION
+   ============================================================ */
+function buildStudyList() {
+  const list = document.getElementById('studyList');
+  const filter = state.studyFilter;
+  const search = state.studySearch.toLowerCase().trim();
+
+  let html = '';
+  let totalCount = 0;
+
+  const matchesSearch = (q) =>
+    !search ||
+    q.q.toLowerCase().includes(search) ||
+    q.topic.toLowerCase().includes(search) ||
+    (q.explanation && q.explanation.toLowerCase().includes(search)) ||
+    (q.answerKey && q.answerKey.toLowerCase().includes(search));
+
+  // MC section
+  if (filter === 'all' || filter === 'mc') {
+    const items = QUESTIONS.mc.filter(matchesSearch);
+    if (items.length) {
+      html += `<div class="study-section-header">📝 Multiple Choice (${items.length})</div>`;
+      items.forEach((q, i) => {
+        totalCount++;
+        const optionsHtml = Object.entries(q.options).map(([k, v]) =>
+          `<li class="${k === q.answer ? 'correct-answer' : ''}">
+             <span class="opt-letter">${k})</span>
+             <span>${escapeHtml(v)}</span>
+           </li>`).join('');
+        html += `
+          <div class="study-item" data-type="mc" data-id="${q.id}">
+            <div class="study-item-header" onclick="toggleStudyItem(this)">
+              <div class="study-item-num">${i + 1}</div>
+              <div class="study-item-info">
+                <div class="study-item-topic">${escapeHtml(q.topic)}</div>
+                <div class="study-item-question">${q.q}</div>
+              </div>
+              <div class="study-item-toggle">▼</div>
+            </div>
+            <div class="study-item-body">
+              <ul class="study-options-list">${optionsHtml}</ul>
+              <div class="study-answer">
+                <h4>✓ Answer: ${q.answer})</h4>
+                <div class="answer-content">${escapeHtml(q.explanation)}</div>
+              </div>
+            </div>
+          </div>`;
+      });
+    }
+  }
+
+  // SA section
+  if (filter === 'all' || filter === 'sa') {
+    const items = QUESTIONS.sa.filter(matchesSearch);
+    if (items.length) {
+      html += `<div class="study-section-header">✍️ Short Answer (${items.length})</div>`;
+      items.forEach((q, i) => {
+        totalCount++;
+        html += `
+          <div class="study-item" data-type="sa" data-id="${q.id}">
+            <div class="study-item-header" onclick="toggleStudyItem(this)">
+              <div class="study-item-num">${i + 1}</div>
+              <div class="study-item-info">
+                <div class="study-item-topic">${escapeHtml(q.topic)}</div>
+                <div class="study-item-question">${escapeHtml(q.q)}</div>
+              </div>
+              <div class="study-item-toggle">▼</div>
+            </div>
+            <div class="study-item-body">
+              <div class="study-answer">
+                <h4>📖 Model Answer</h4>
+                <div class="answer-content">${escapeHtml(q.answerKey)}</div>
+              </div>
+            </div>
+          </div>`;
+      });
+    }
+  }
+
+  // LA section
+  if (filter === 'all' || filter === 'la') {
+    const items = QUESTIONS.la.filter(matchesSearch);
+    if (items.length) {
+      html += `<div class="study-section-header">📄 Long Answer (${items.length})</div>`;
+      items.forEach((q, i) => {
+        totalCount++;
+        html += `
+          <div class="study-item" data-type="la" data-id="${q.id}">
+            <div class="study-item-header" onclick="toggleStudyItem(this)">
+              <div class="study-item-num">${i + 1}</div>
+              <div class="study-item-info">
+                <div class="study-item-topic">${escapeHtml(q.topic)}</div>
+                <div class="study-item-question">${escapeHtml(q.q)}</div>
+              </div>
+              <div class="study-item-toggle">▼</div>
+            </div>
+            <div class="study-item-body">
+              <div class="study-answer">
+                <h4>📖 Model Answer</h4>
+                <pre>${escapeHtml(q.answerKey)}</pre>
+              </div>
+            </div>
+          </div>`;
+      });
+    }
+  }
+
+  if (totalCount === 0) {
+    html = `<div class="feedback info">No questions match your filter/search.</div>`;
+  }
+
+  list.innerHTML = html;
+  document.getElementById('studyCount').textContent = `${totalCount} question${totalCount === 1 ? '' : 's'}`;
+}
+
+function toggleStudyItem(header) {
+  const item = header.closest('.study-item');
+  item.classList.toggle('open');
+}
+
+function expandAllStudy() {
+  document.querySelectorAll('.study-item').forEach(i => i.classList.add('open'));
+}
+
+function collapseAllStudy() {
+  document.querySelectorAll('.study-item').forEach(i => i.classList.remove('open'));
+}
+
+function initStudyFilters() {
+  document.querySelectorAll('.study-controls .filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.study-controls .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      state.studyFilter = btn.dataset.filter;
+      buildStudyList();
+    });
+  });
+  const searchInput = document.getElementById('studySearch');
+  let searchTimer;
+  searchInput.addEventListener('input', (e) => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => {
+      state.studySearch = e.target.value;
+      buildStudyList();
+    }, 200);
+  });
+}
+
+/* ============================================================
+   OLLAMA
+   ============================================================ */
+function getOllamaUrl() { return document.getElementById('ollamaUrl').value.trim().replace(/\/$/,''); }
+function getModel() { return document.getElementById('ollamaModel').value.trim(); }
+
+async function testConnection() {
+  const status = document.getElementById('connStatus');
+  status.className = 'status wait';
+  status.textContent = 'Checking...';
+  try {
+    const r = await fetch(`${getOllamaUrl()}/api/tags`, { method: 'GET' });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const data = await r.json();
+    const models = (data.models || []).map(m => m.name).join(', ') || 'none';
+    status.className = 'status ok';
+    status.textContent = `✓ Connected. Models: ${models}`;
+  } catch (e) {
+    status.className = 'status err';
+    status.textContent = `✗ ${e.message}. Is Ollama running with OLLAMA_ORIGINS=*?`;
+  }
+}
+
+async function queryOllama(prompt, forceJson = false) {
+  const body = {
+    model: getModel(),
+    messages: [{ role: 'user', content: prompt }],
+    stream: false
+  };
+  if (forceJson) body.format = 'json';
+
+  const r = await fetch(`${getOllamaUrl()}/api/chat`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) throw new Error(`Ollama HTTP ${r.status}`);
+  const data = await r.json();
+  return data.message.content;
+}
+
+async function evaluateAnswer(question, userAnswer, answerKey, type) {
+  let prompt;
+  if (type === 'short') {
+    prompt = `You are a molecular genetics TA evaluating a student's SHORT ANSWER response.
+
+QUESTION:
+${question}
+
+MODEL ANSWER:
+${answerKey}
+
+STUDENT ANSWER:
+${userAnswer}
+
+Evaluate based on accuracy, completeness, and clarity. Award partial credit.
+
+Respond ONLY with JSON:
+{
+  "score": <0 to 1>,
+  "correct": <true if score >= 0.7>,
+  "feedback": "Detailed feedback on what was right/wrong and how to improve.",
+  "key_points_covered": ["..."],
+  "key_points_missing": ["..."]
+}`;
+  } else {
+    prompt = `You are a molecular genetics professor evaluating a student's LONG ANSWER response.
+
+QUESTION:
+${question}
+
+MODEL ANSWER:
+${answerKey}
+
+STUDENT ANSWER:
+${userAnswer}
+
+Evaluate on: scientific accuracy, depth, completeness, integration of concepts, clarity. Be rigorous but fair (1.0 reserved for excellent answers).
+
+Respond ONLY with JSON:
+{
+  "score": <0 to 1>,
+  "correct": <true if score >= 0.7>,
+  "feedback": "Comprehensive feedback.",
+  "key_points_covered": ["..."],
+  "key_points_missing": ["..."],
+  "suggestions": ["..."]
+}`;
+  }
+
+  const raw = await queryOllama(prompt, true);
+  try {
+    return JSON.parse(raw);
+  } catch {
+    const m = raw.match(/\{[\s\S]*\}/);
+    if (m) return JSON.parse(m[0]);
+    throw new Error('Could not parse Ollama response: ' + raw.slice(0, 200));
+  }
+}
+
+/* ============================================================
+   DIAGRAMS (SVG string generators)
+   ============================================================ */
+const DIAGRAMS = {
+  'DNA Double Helix': () => {
+    let bp = '';
+    for (let x = 40; x <= 560; x += 30) {
+      const y1 = 130 + 55 * Math.sin((x - 40) / 60);
+      const y2 = 130 - 55 * Math.sin((x - 40) / 60);
+      bp += `<line x1="${x}" y1="${y1}" x2="${x}" y2="${y2}" stroke="#111" stroke-width="1.2"/>`;
+    }
+    let wave1 = '', wave2 = '';
+    for (let x = 40; x <= 560; x += 4) {
+      const y1 = 130 + 55 * Math.sin((x - 40) / 60);
+      const y2 = 130 - 55 * Math.sin((x - 40) / 60);
+      wave1 += `${x === 40 ? 'M' : 'L'}${x},${y1} `;
+      wave2 += `${x === 40 ? 'M' : 'L'}${x},${y2} `;
+    }
+    return `<svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+      <path d="${wave1}" stroke="#3b82f6" stroke-width="3" fill="none"/>
+      <path d="${wave2}" stroke="#ef4444" stroke-width="3" fill="none"/>
+      ${bp}
+      <text x="20" y="75" font-size="14" font-weight="bold" fill="#3b82f6">5'</text>
+      <text x="565" y="185" font-size="14" font-weight="bold" fill="#3b82f6">3'</text>
+      <text x="20" y="185" font-size="14" font-weight="bold" fill="#ef4444">3'</text>
+      <text x="565" y="75" font-size="14" font-weight="bold" fill="#ef4444">5'</text>
+      <text x="300" y="240" text-anchor="middle" font-size="13" fill="#666">Antiparallel strands with complementary base pairing</text>
+    </svg>`;
+  },
+
+  'PCR Thermal Cycle': () => {
+    const cycles = 3, cellW = 170;
+    let path = 'M 50,220 ';
+    let labels = '';
+    for (let c = 0; c < cycles; c++) {
+      const x0 = 50 + c * cellW;
+      path += `L ${x0},70 L ${x0 + 40},70 L ${x0 + 40},170 L ${x0 + 90},170 L ${x0 + 90},90 L ${x0 + 130},90 L ${x0 + 130},220 `;
+    }
+    path += 'L ' + (50 + cycles * cellW) + ',220';
+    for (let c = 0; c < cycles; c++) {
+      const x0 = 50 + c * cellW;
+      labels += `<text x="${x0 + 20}" y="60" font-size="10" fill="#dc2626" text-anchor="middle">95°C</text>`;
+      labels += `<text x="${x0 + 65}" y="185" font-size="10" fill="#2563eb" text-anchor="middle">55°C</text>`;
+      labels += `<text x="${x0 + 110}" y="105" font-size="10" fill="#16a34a" text-anchor="middle">72°C</text>`;
+    }
+    return `<svg viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
+      <line x1="40" y1="220" x2="600" y2="220" stroke="#999" stroke-width="1"/>
+      <line x1="40" y1="220" x2="40" y2="40" stroke="#999" stroke-width="1"/>
+      <text x="25" y="140" font-size="11" fill="#666" transform="rotate(-90,25,140)">Temp (°C)</text>
+      <text x="320" y="245" font-size="11" fill="#666" text-anchor="middle">Time →</text>
+      <path d="${path}" stroke="#3b82f6" stroke-width="2.5" fill="none"/>
+      ${labels}
+      <text x="50" y="35" font-size="10" fill="#dc2626">Denaturation</text>
+      <text x="90" y="35" font-size="10" fill="#2563eb">Annealing</text>
+      <text x="140" y="35" font-size="10" fill="#16a34a">Extension</text>
+    </svg>`;
+  },
+
+  'qPCR Amplification': () => {
+    const sigmoid = (x, x0) => 1 / (1 + Math.exp(-0.8 * (x - x0)));
+    const line = (x0, color, label) => {
+      let p = '';
+      for (let i = 0; i <= 40; i++) {
+        const x = 60 + i * 11;
+        const y = 220 - sigmoid(i, x0) * 170;
+        p += `${i === 0 ? 'M' : 'L'}${x},${y} `;
+      }
+      return `<path d="${p}" stroke="${color}" stroke-width="2.5" fill="none"/>
+              <text x="${60 + 40 * 11 + 10}" y="${220 - sigmoid(40, x0) * 170 + 4}" font-size="11" fill="${color}" font-weight="bold">${label}</text>`;
+    };
+    return `<svg viewBox="0 0 620 280" xmlns="http://www.w3.org/2000/svg">
+      <line x1="60" y1="220" x2="580" y2="220" stroke="#999" stroke-width="1"/>
+      <line x1="60" y1="220" x2="60" y2="30" stroke="#999" stroke-width="1"/>
+      <line x1="60" y1="200" x2="580" y2="200" stroke="#666" stroke-width="1" stroke-dasharray="5,4"/>
+      <text x="585" y="204" font-size="10" fill="#666">Threshold</text>
+      <text x="320" y="260" font-size="12" fill="#666" text-anchor="middle">PCR Cycles →</text>
+      <text x="30" y="130" font-size="12" fill="#666" transform="rotate(-90,30,130)">Fluorescence</text>
+      ${line(15, '#3b82f6', 'Sample A (Ct≈15)')}
+      ${line(22, '#16a34a', 'Sample B (Ct≈22)')}
+      ${line(28, '#dc2626', 'Sample C (Ct≈28)')}
+      ${[0,10,20,30,40].map(i => `<text x="${60 + i * 11}" y="238" font-size="10" fill="#666" text-anchor="middle">${i}</text>`).join('')}
+    </svg>`;
+  },
+
+  'Transcription': () => {
+    return `<svg viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
+      <line x1="40" y1="130" x2="580" y2="130" stroke="#3b82f6" stroke-width="3"/>
+      <line x1="40" y1="160" x2="580" y2="160" stroke="#ef4444" stroke-width="3"/>
+      <text x="20" y="120" font-size="13" font-weight="bold" fill="#3b82f6">5'</text>
+      <text x="585" y="120" font-size="13" font-weight="bold" fill="#3b82f6">3'</text>
+      <text x="20" y="180" font-size="13" font-weight="bold" fill="#ef4444">3'</text>
+      <text x="585" y="180" font-size="13" font-weight="bold" fill="#ef4444">5'</text>
+      <text x="300" y="115" text-anchor="middle" font-size="12" fill="#3b82f6">Coding (non-template) strand</text>
+      <text x="300" y="195" text-anchor="middle" font-size="12" fill="#ef4444">Template strand (read 3'→5')</text>
+      <circle cx="310" cy="145" r="38" fill="#16a34a" opacity="0.75"/>
+      <text x="310" y="149" text-anchor="middle" font-size="11" fill="white" font-weight="bold">RNA Pol</text>
+      <path d="M 310,95 Q 400,60 480,95" stroke="#a855f7" stroke-width="2.5" fill="none"/>
+      <text x="490" y="90" font-size="13" fill="#a855f7" font-weight="bold">RNA</text>
+      <polygon points="360,145 385,138 385,152" fill="#16a34a"/>
+      <text x="395" y="215" font-size="11" fill="#666">Direction of transcription →</text>
+    </svg>`;
+  },
+
+  'Central Dogma': () => {
+    return `<svg viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg">
+      <rect x="40" y="80" width="130" height="60" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/>
+      <text x="105" y="117" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e40af">DNA</text>
+      <rect x="245" y="80" width="130" height="60" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+      <text x="310" y="117" text-anchor="middle" font-size="16" font-weight="bold" fill="#166534">RNA</text>
+      <rect x="450" y="80" width="130" height="60" rx="10" fill="#fee2e2" stroke="#ef4444" stroke-width="2"/>
+      <text x="515" y="117" text-anchor="middle" font-size="16" font-weight="bold" fill="#991b1b">Protein</text>
+      <line x1="170" y1="110" x2="240" y2="110" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+      <line x1="375" y1="110" x2="445" y2="110" stroke="#333" stroke-width="2" marker-end="url(#arrow)"/>
+      <text x="205" y="70" text-anchor="middle" font-size="11" fill="#333">Transcription</text>
+      <text x="410" y="70" text-anchor="middle" font-size="11" fill="#333">Translation</text>
+      <path d="M 40,110 Q 20,30 105,30 Q 190,30 170,90" stroke="#6b7280" stroke-width="2" fill="none" marker-end="url(#arrow)"/>
+      <text x="105" y="22" text-anchor="middle" font-size="11" fill="#6b7280">Replication</text>
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+          <polygon points="0,0 9,3 0,6" fill="#333"/>
+        </marker>
+      </defs>
+    </svg>`;
+  },
+
+  'Chromatin Structure': () => {
+    let nucs = '';
+    const colors = ['#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6','#ec4899'];
+    for (let i = 0; i < 7; i++) {
+      const x = 80 + i * 75;
+      nucs += `<circle cx="${x}" cy="130" r="30" fill="${colors[i]}" opacity="0.7"/>
+               <text x="${x}" y="135" text-anchor="middle" font-size="11" fill="white" font-weight="bold">H${(i%4)+1}</text>
+               <line x1="${x}" y1="100" x2="${x+12}" y2="70" stroke="#333" stroke-width="1.5"/>
+               <line x1="${x}" y1="160" x2="${x-12}" y2="190" stroke="#333" stroke-width="1.5"/>`;
+    }
+    return `<svg viewBox="0 0 620 240" xmlns="http://www.w3.org/2000/svg">
+      <path d="M 40,130 Q 60,90 80,130 Q 110,170 160,130 Q 210,90 260,130 Q 310,170 360,130 Q 410,90 460,130 Q 510,170 560,130 L 590,130"
+            stroke="#3b82f6" stroke-width="2.5" fill="none"/>
+      ${nucs}
+      <text x="310" y="225" text-anchor="middle" font-size="12" fill="#666">Nucleosomes (histone octamers) with DNA wrapped around them</text>
+      <text x="540" y="50" font-size="11" fill="#333">Histone tails</text>
+      <text x="540" y="65" font-size="11" fill="#333">(for modification)</text>
+    </svg>`;
+  },
+
+  'EMSA Gel': () => {
+    return `<svg viewBox="0 0 620 320" xmlns="http://www.w3.org/2000/svg">
+      <rect x="40" y="40" width="540" height="250" fill="#f3f4f6" stroke="#333"/>
+      ${[1,2,3,4,5].map(i => `<line x1="${40+i*90}" y1="40" x2="${40+i*90}" y2="290" stroke="#ccc"/>`).join('')}
+      <rect x="70" y="240" width="40" height="10" fill="#111"/>
+      <rect x="160" y="140" width="40" height="10" fill="#111"/>
+      <rect x="250" y="240" width="40" height="10" fill="#111"/>
+      <rect x="340" y="140" width="40" height="10" fill="#111"/>
+      <rect x="430" y="90" width="40" height="10" fill="#111"/>
+      ${['Free probe','+ Protein','+ Protein\n+ Competitor','+ Protein\n+ Mutant\nCompetitor','+ Protein\n+ Antibody'].map((t,i) =>
+        `<text x="${90+i*90}" y="315" font-size="9" fill="#333" text-anchor="middle">${t.split('\n').map((l,j)=>`<tspan x="${90+i*90}" dy="${j===0?0:10}">${l}</tspan>`).join('')}</text>`).join('')}
+      <text x="30" y="50" font-size="10" fill="#333" text-anchor="end">−</text>
+      <text x="30" y="90" font-size="10" fill="#333" text-anchor="end">Supershift</text>
+      <text x="30" y="145" font-size="10" fill="#333" text-anchor="end">Shift</text>
+      <text x="30" y="245" font-size="10" fill="#333" text-anchor="end">Free</text>
+    </svg>`;
+  },
+
+  'Reporter Gene Assay': () => {
+    return `<svg viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
+      <text x="310" y="30" text-anchor="middle" font-size="13" font-weight="bold" fill="#333">Reporter Gene Assay for Enhancer Identification</text>
+      <rect x="40" y="60" width="100" height="30" fill="#fbbf24" opacity="0.7" stroke="#333"/>
+      <rect x="140" y="60" width="100" height="30" fill="#fde047" opacity="0.7" stroke="#333"/>
+      <rect x="240" y="60" width="150" height="30" fill="#86efac" opacity="0.7" stroke="#333"/>
+      <text x="90" y="80" text-anchor="middle" font-size="11">Enhancer</text>
+      <text x="190" y="80" text-anchor="middle" font-size="11">Promoter</text>
+      <text x="315" y="80" text-anchor="middle" font-size="11">Reporter (GFP/LUC)</text>
+      <polygon points="400,75 425,75 425,68 440,75 425,82 425,75" fill="#333"/>
+      <text x="470" y="80" font-size="11" fill="#333">Transcription →</text>
+      <ellipse cx="150" cy="180" rx="70" ry="45" fill="#e5e7eb" stroke="#666"/>
+      <text x="150" y="175" text-anchor="middle" font-size="11">No Enhancer</text>
+      <text x="150" y="190" text-anchor="middle" font-size="10" fill="#666">Low expression</text>
+      <ellipse cx="420" cy="180" rx="70" ry="45" fill="#86efac" stroke="#16a34a"/>
+      <text x="420" y="175" text-anchor="middle" font-size="11">+ Enhancer</text>
+      <text x="420" y="190" text-anchor="middle" font-size="10" fill="#166534">High expression</text>
+    </svg>`;
+  },
+
+  'STR Analysis': () => {
+    return `<svg viewBox="0 0 620 200" xmlns="http://www.w3.org/2000/svg">
+      <text x="310" y="25" text-anchor="middle" font-size="13" font-weight="bold" fill="#333">Short Tandem Repeat (STR) Locus</text>
+      <rect x="40" y="70" width="120" height="40" fill="#dbeafe" stroke="#3b82f6"/>
+      <rect x="160" y="70" width="300" height="40" fill="#fef3c7" stroke="#f59e0b"/>
+      <rect x="460" y="70" width="120" height="40" fill="#dbeafe" stroke="#3b82f6"/>
+      <text x="100" y="95" text-anchor="middle" font-size="11">Flanking DNA</text>
+      <text x="310" y="95" text-anchor="middle" font-size="11">GATA GATA GATA GATA ...</text>
+      <text x="520" y="95" text-anchor="middle" font-size="11">Flanking DNA</text>
+      <polygon points="160,120 160,150 152,150 160,160 168,150 160,150" fill="#dc2626"/>
+      <text x="160" y="180" font-size="10" fill="#dc2626" text-anchor="middle">Forward Primer</text>
+      <polygon points="460,120 460,150 452,150 460,160 468,150 460,150" fill="#dc2626"/>
+      <text x="460" y="180" font-size="10" fill="#dc2626" text-anchor="middle">Reverse Primer</text>
+      <text x="310" y="135" text-anchor="middle" font-size="11" font-style="italic" fill="#666">variable number of repeats (n)</text>
+    </svg>`;
+  },
+
+  'Gel Electrophoresis': () => {
+    return `<svg viewBox="0 0 620 340" xmlns="http://www.w3.org/2000/svg">
+      <rect x="60" y="40" width="500" height="270" fill="#e5e7eb" stroke="#333" stroke-width="2"/>
+      ${[1,2,3,4].map(i => `<rect x="${80+(i-1)*120}" y="30" width="70" height="15" fill="#111"/>`).join('')}
+      ${[1,2,3,4,5,6,7,8].map((_,i) => `<rect x="85" y="${80+i*25}" width="60" height="6" fill="#111"/>`).join('')}
+      <rect x="205" y="180" width="60" height="6" fill="#1e3a8a"/>
+      <rect x="325" y="180" width="60" height="6" fill="#1e3a8a"/>
+      <rect x="325" y="130" width="60" height="6" fill="#1e3a8a"/>
+      <rect x="445" y="130" width="60" height="6" fill="#1e3a8a"/>
+      ${['Ladder','Sample 1\n(12/12)','Sample 2\n(12/15)','Sample 3\n(15/15)'].map((t,i) =>
+        `<text x="${115+i*120}" y="325" font-size="10" text-anchor="middle">${t.split('\n').map((l,j)=>`<tspan x="${115+i*120}" dy="${j===0?0:11}">${l}</tspan>`).join('')}</text>`).join('')}
+      <text x="55" y="85" font-size="10" text-anchor="end">High MW</text>
+      <text x="55" y="295" font-size="10" text-anchor="end">Low MW</text>
+      <text x="310" y="20" text-anchor="middle" font-size="13" font-weight="bold">Gel Electrophoresis of STR PCR Products</text>
+    </svg>`;
+  },
+
+  'ChIP Assay': () => {
+    return `<svg viewBox="0 0 620 300" xmlns="http://www.w3.org/2000/svg">
+      <text x="310" y="22" text-anchor="middle" font-size="13" font-weight="bold">ChIP Assay Workflow</text>
+      ${['1. Crosslink','2. Fragment','3. Immunoprecipitate','4. Purify DNA','5. Analyze'].map((t,i) =>
+        `<rect x="30" y="${50+i*45}" width="200" height="35" rx="6" fill="#dbeafe" stroke="#3b82f6"/>
+         <text x="130" y="${73+i*45}" text-anchor="middle" font-size="11" fill="#1e40af">${t}</text>`).join('')}
+      ${[1,2,3,4].map(i => `<polygon points="130,${85+i*45} 122,${85+i*45} 130,${95+i*45} 138,${85+i*45}" fill="#666"/>`).join('')}
+      <text x="400" y="55" font-size="12" font-weight="bold" fill="#333">Enrichment (qPCR)</text>
+      ${[0.5, 0.85, 0.3, 0.2, 0.15, 0.2, 0.25].map((h,i) =>
+        `<rect x="${320+i*38}" y="${240-h*180}" width="30" height="${h*180}" fill="#3b82f6" stroke="#1e40af"/>
+         <text x="${335+i*38}" y="255" font-size="9" text-anchor="middle">${'ABCDEFG'[i]}</text>`).join('')}
+      <text x="450" y="275" font-size="10" fill="#666" text-anchor="middle">Fragment</text>
+      <text x="400" y="130" font-size="11" fill="#dc2626" font-weight="bold">Fragment B enriched →</text>
+    </svg>`;
+  },
+
+  'Enhancer-Promoter': () => {
+    return `<svg viewBox="0 0 620 260" xmlns="http://www.w3.org/2000/svg">
+      <line x1="40" y1="150" x2="580" y2="150" stroke="#3b82f6" stroke-width="3"/>
+      <rect x="60" y="130" width="80" height="40" fill="#fbbf24" opacity="0.7" stroke="#333"/>
+      <text x="100" y="195" text-anchor="middle" font-size="11">Enhancer</text>
+      <rect x="300" y="130" width="80" height="40" fill="#fde047" opacity="0.7" stroke="#333"/>
+      <text x="340" y="195" text-anchor="middle" font-size="11">Promoter</text>
+      <polygon points="380,130 380,105 372,105 380,95 388,105 380,105" fill="#16a34a"/>
+      <text x="380" y="85" text-anchor="middle" font-size="11" fill="#16a34a">+1</text>
+      <rect x="420" y="130" width="120" height="40" fill="#bfdbfe" opacity="0.8" stroke="#333"/>
+      <text x="480" y="155" text-anchor="middle" font-size="11">Gene</text>
+      <circle cx="100" cy="90" r="16" fill="#ef4444" opacity="0.8"/>
+      <text x="100" y="94" text-anchor="middle" font-size="10" fill="white">TF</text>
+      <circle cx="340" cy="90" r="16" fill="#8b5cf6" opacity="0.8"/>
+      <text x="340" y="94" text-anchor="middle" font-size="10" fill="white">TF</text>
+      <rect x="150" y="75" width="160" height="30" rx="8" fill="#22c55e" opacity="0.6"/>
+      <text x="230" y="95" text-anchor="middle" font-size="11">Mediator / Coactivator</text>
+      <circle cx="420" cy="90" r="20" fill="#3b82f6" opacity="0.8"/>
+      <text x="420" y="94" text-anchor="middle" font-size="10" fill="white">RNA Pol</text>
+      <path d="M 116,90 Q 160,40 190,90" stroke="#666" stroke-width="1.5" fill="none" stroke-dasharray="3,3"/>
+      <path d="M 320,90 Q 320,50 350,90" stroke="#666" stroke-width="1.5" fill="none" stroke-dasharray="3,3"/>
+      <text x="310" y="240" text-anchor="middle" font-size="11" fill="#666">Enhancers act at a distance; Mediator bridges activators to the basal apparatus</text>
+    </svg>`;
+  },
+
+  'Histone Modifications': () => {
+    return `<svg viewBox="0 0 620 280" xmlns="http://www.w3.org/2000/svg">
+      <text x="310" y="22" text-anchor="middle" font-size="13" font-weight="bold">Histone Tail Modifications</text>
+      <circle cx="310" cy="150" r="70" fill="#bfdbfe" opacity="0.6" stroke="#3b82f6"/>
+      <text x="310" y="155" text-anchor="middle" font-size="12" fill="#1e40af">Nucleosome Core</text>
+      ${[
+        {x:240, y:150, dx:-40, dy:-40, label:'Ac', color:'#ef4444'},
+        {x:310, y:80, dx:0, dy:-55, label:'Me', color:'#3b82f6'},
+        {x:380, y:150, dx:40, dy:-40, label:'P', color:'#22c55e'},
+        {x:310, y:220, dx:0, dy:55, label:'Ub', color:'#f59e0b'}
+      ].map(m => `<line x1="${m.x}" y1="${m.y}" x2="${m.x+m.dx}" y2="${m.y+m.dy}" stroke="#333" stroke-width="2"/>
+                  <circle cx="${m.x+m.dx}" cy="${m.y+m.dy}" r="12" fill="${m.color}" opacity="0.8"/>
+                  <text x="${m.x+m.dx}" y="${m.y+m.dy+4}" text-anchor="middle" font-size="10" fill="white" font-weight="bold">${m.label}</text>`).join('')}
+      <text x="40" y="260" font-size="10" fill="#ef4444">Ac = Acetylation (active)</text>
+      <text x="200" y="260" font-size="10" fill="#3b82f6">Me = Methylation (context)</text>
+      <text x="380" y="260" font-size="10" fill="#22c55e">P = Phosphorylation (active)</text>
+      <text x="40" y="275" font-size="10" fill="#f59e0b">Ub = Ubiquitination (context)</text>
+    </svg>`;
+  }
+};
+
+/* ============================================================
+   UI HELPERS
+   ============================================================ */
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.querySelector(`nav.tabs button[data-tab="${name}"]`).classList.add('active');
+}
+
+document.querySelectorAll('nav.tabs button').forEach(btn => {
+  btn.addEventListener('click', () => showTab(btn.dataset.tab));
+});
+
+function populateTopicSelects() {
+  const mcTopics = [...new Set(QUESTIONS.mc.map(q => q.topic))].sort();
+  const saTopics = [...new Set(QUESTIONS.sa.map(q => q.topic))].sort();
+  const laTopics = [...new Set(QUESTIONS.la.map(q => q.topic))].sort();
+  mcTopics.forEach(t => document.getElementById('mcTopic').insertAdjacentHTML('beforeend', `<option>${t}</option>`));
+  saTopics.forEach(t => document.getElementById('saTopic').insertAdjacentHTML('beforeend', `<option>${t}</option>`));
+  laTopics.forEach(t => document.getElementById('laTopic').insertAdjacentHTML('beforeend', `<option>${t}</option>`));
+}
+
+function renderDiagramGrid() {
+  const grid = document.getElementById('diagramGrid');
+  grid.innerHTML = Object.keys(DIAGRAMS).map(name =>
+    `<button class="diagram-btn" onclick="renderDiagram('${name}')">📊 ${name}</button>`
+  ).join('');
+}
+
+function renderDiagram(name) {
+  const output = document.getElementById('diagramOutput');
+  output.innerHTML = `<div class="diagram-container">${DIAGRAMS[name]()}</div>`;
+}
+
+/* ============================================================
+   MULTIPLE CHOICE
+   ============================================================ */
+function startMC() {
+  const topic = document.getElementById('mcTopic').value;
+  const pool = topic ? QUESTIONS.mc.filter(q => q.topic === topic) : QUESTIONS.mc.slice();
+  if (!pool.length) return;
+  state.currentMC = { pool, index: 0, correct: 0, answered: false };
+  renderMC();
+}
+
+function renderMC() {
+  const c = state.currentMC;
+  if (c.index >= c.pool.length) return renderMCDone();
+  const q = c.pool[c.index];
+  c.answered = false;
+  const total = c.pool.length;
+  const pct = ((c.index) / total) * 100;
+  document.getElementById('mcContent').innerHTML = `
+    <div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
+    <div class="question-meta">
+      <span>${q.topic}</span>
+      <span>Question ${c.index+1} / ${total}</span>
+    </div>
+    <div class="question-text">${q.q}</div>
+    <div class="options" id="mcOptions">
+      ${Object.entries(q.options).map(([k, v]) =>
+        `<div class="option" data-key="${k}" onclick="selectMC('${k}')">
+           <span class="option-letter">${k})</span>
+           <span class="option-text">${escapeHtml(v)}</span>
+         </div>`).join('')}
+    </div>
+    <div class="actions">
+      <button class="btn" id="mcSubmit" onclick="submitMC()" disabled>Submit Answer</button>
+    </div>
+    <div id="mcFeedback"></div>
+  `;
+}
+
+function selectMC(key) {
+  if (state.currentMC.answered) return;
+  document.querySelectorAll('#mcOptions .option').forEach(o => o.classList.remove('selected'));
+  document.querySelector(`#mcOptions .option[data-key="${key}"]`).classList.add('selected');
+  document.getElementById('mcSubmit').disabled = false;
+}
+
+function submitMC() {
+  const c = state.currentMC;
+  const q = c.pool[c.index];
+  const selected = document.querySelector('#mcOptions .option.selected');
+  if (!selected) return;
+  const key = selected.dataset.key;
+  c.answered = true;
+  state.score.total++;
+  if (key === q.answer) { state.score.correct++; c.correct++; }
+  document.querySelectorAll('#mcOptions .option').forEach(o => {
+    if (o.dataset.key === q.answer) o.classList.add('correct');
+    if (o.dataset.key === key && key !== q.answer) o.classList.add('incorrect');
+  });
+  const isCorrect = key === q.answer;
+  document.getElementById('mcFeedback').innerHTML = `
+    <div class="feedback ${isCorrect ? 'correct' : 'incorrect'}">
+      <strong>${isCorrect ? '✓ Correct!' : '✗ Incorrect.'}</strong>
+      <br><br>Correct answer: <strong>${q.answer})</strong>
+      <br><br><strong>Explanation:</strong> ${escapeHtml(q.explanation)}
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="nextMC()">${c.index+1 < c.pool.length ? 'Next Question →' : 'See Results'}</button>
+    </div>
+  `;
+}
+
+function nextMC() {
+  state.currentMC.index++;
+  renderMC();
+}
+
+function renderMCDone() {
+  const c = state.currentMC;
+  const pct = Math.round((c.correct / c.pool.length) * 100);
+  document.getElementById('mcContent').innerHTML = `
+    <div class="feedback ${pct >= 70 ? 'correct' : 'info'}">
+      <strong>Session complete!</strong><br>
+      You got ${c.correct} / ${c.pool.length} correct (${pct}%).
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="startMC()">Retry</button>
+      <button class="btn secondary" onclick="showTab('score')">View Score</button>
+    </div>
+  `;
+  updateScorePanel();
+}
+
+/* ============================================================
+   SHORT ANSWER
+   ============================================================ */
+function startSA() {
+  const topic = document.getElementById('saTopic').value;
+  const pool = topic ? QUESTIONS.sa.filter(q => q.topic === topic) : QUESTIONS.sa.slice();
+  if (!pool.length) return;
+  state.currentSA = { pool, index: 0, correct: 0 };
+  renderSA();
+}
+
+function renderSA() {
+  const c = state.currentSA;
+  if (c.index >= c.pool.length) return renderSADone();
+  const q = c.pool[c.index];
+  const total = c.pool.length;
+  document.getElementById('saContent').innerHTML = `
+    <div class="question-meta">
+      <span>${q.topic}</span>
+      <span>Question ${c.index+1} / ${total}</span>
+    </div>
+    <div class="question-text">${escapeHtml(q.q)}</div>
+    <textarea id="saInput" placeholder="Type your answer here..."></textarea>
+    <div class="actions">
+      <button class="btn" id="saSubmit" onclick="submitSA()">Evaluate with Ollama</button>
+    </div>
+    <div id="saFeedback"></div>
+  `;
+}
+
+async function submitSA() {
+  const c = state.currentSA;
+  const q = c.pool[c.index];
+  const input = document.getElementById('saInput').value.trim();
+  if (!input) return alert('Please write an answer first.');
+  const btn = document.getElementById('saSubmit');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Evaluating...';
+  try {
+    const result = await evaluateAnswer(q.q, input, q.answerKey, 'short');
+    state.score.total++;
+    if (result.correct) { state.score.correct++; c.correct++; }
+    document.getElementById('saFeedback').innerHTML = `
+      <div class="feedback ${result.correct ? 'correct' : 'incorrect'}">
+        <strong>Score: ${(result.score * 100).toFixed(0)}%</strong>
+        <br><br>${escapeHtml(result.feedback || '')}
+      </div>
+      ${result.key_points_covered?.length ? `
+        <details open><summary>✓ Key points you covered</summary>
+          <ul class="kv-list">${result.key_points_covered.map(p => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        </details>` : ''}
+      ${result.key_points_missing?.length ? `
+        <details open><summary>✗ Key points missing</summary>
+          <ul class="kv-list">${result.key_points_missing.map(p => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        </details>` : ''}
+      <details><summary>📖 Model Answer</summary>
+        <pre class="mono" style="white-space:pre-wrap; padding:0.5rem;">${escapeHtml(q.answerKey)}</pre>
+      </details>
+      <div class="actions">
+        <button class="btn" onclick="nextSA()">${c.index+1 < c.pool.length ? 'Next Question →' : 'See Results'}</button>
+      </div>
+    `;
+    updateScorePanel();
+  } catch (e) {
+    document.getElementById('saFeedback').innerHTML = `
+      <div class="feedback warn">
+        <strong>Evaluation failed:</strong> ${escapeHtml(e.message)}<br><br>
+        Make sure Ollama is running with OLLAMA_ORIGINS=* and the model "<code>${getModel()}</code>" is pulled.
+      </div>
+      <div class="actions">
+        <button class="btn secondary" onclick="document.getElementById('saSubmit').disabled=false; document.getElementById('saSubmit').textContent='Retry Evaluation';">Retry</button>
+      </div>
+    `;
+  }
+}
+
+function nextSA() { state.currentSA.index++; renderSA(); }
+
+function renderSADone() {
+  const c = state.currentSA;
+  document.getElementById('saContent').innerHTML = `
+    <div class="feedback info">
+      <strong>Session complete!</strong><br>
+      ${c.correct} / ${c.pool.length} answered at passing threshold.
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="startSA()">Retry</button>
+      <button class="btn secondary" onclick="showTab('score')">View Score</button>
+    </div>
+  `;
+}
+
+/* ============================================================
+   LONG ANSWER
+   ============================================================ */
+function startLA() {
+  const topic = document.getElementById('laTopic').value;
+  const pool = topic ? QUESTIONS.la.filter(q => q.topic === topic) : QUESTIONS.la.slice();
+  if (!pool.length) return;
+  state.currentLA = { pool, index: 0, correct: 0 };
+  renderLA();
+}
+
+function renderLA() {
+  const c = state.currentLA;
+  if (c.index >= c.pool.length) return renderLADone();
+  const q = c.pool[c.index];
+  const total = c.pool.length;
+  document.getElementById('laContent').innerHTML = `
+    <div class="question-meta">
+      <span>${q.topic}</span>
+      <span>Question ${c.index+1} / ${total}</span>
+    </div>
+    <div class="question-text">${escapeHtml(q.q)}</div>
+    <textarea id="laInput" placeholder="Write a comprehensive answer. Aim for well-organized paragraphs." style="min-height:220px;"></textarea>
+    <div class="actions">
+      <button class="btn" id="laSubmit" onclick="submitLA()">Evaluate with Ollama</button>
+    </div>
+    <div id="laFeedback"></div>
+  `;
+}
+
+async function submitLA() {
+  const c = state.currentLA;
+  const q = c.pool[c.index];
+  const input = document.getElementById('laInput').value.trim();
+  if (!input) return alert('Please write an answer first.');
+  const btn = document.getElementById('laSubmit');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Evaluating...';
+  try {
+    const result = await evaluateAnswer(q.q, input, q.answerKey, 'long');
+    state.score.total++;
+    if (result.correct) { state.score.correct++; c.correct++; }
+    document.getElementById('laFeedback').innerHTML = `
+      <div class="feedback ${result.correct ? 'correct' : 'incorrect'}">
+        <strong>Score: ${(result.score * 100).toFixed(0)}%</strong>
+        <br><br>${escapeHtml(result.feedback || '')}
+      </div>
+      ${result.key_points_covered?.length ? `
+        <details open><summary>✓ Key points covered</summary>
+          <ul class="kv-list">${result.key_points_covered.map(p => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        </details>` : ''}
+      ${result.key_points_missing?.length ? `
+        <details open><summary>✗ Key points missing</summary>
+          <ul class="kv-list">${result.key_points_missing.map(p => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        </details>` : ''}
+      ${result.suggestions?.length ? `
+        <details open><summary>💡 Suggestions for improvement</summary>
+          <ul class="kv-list">${result.suggestions.map(p => `<li>${escapeHtml(p)}</li>`).join('')}</ul>
+        </details>` : ''}
+      <details><summary>📖 Model Answer</summary>
+        <pre class="mono" style="white-space:pre-wrap; padding:0.5rem;">${escapeHtml(q.answerKey)}</pre>
+      </details>
+      <div class="actions">
+        <button class="btn" onclick="nextLA()">${c.index+1 < c.pool.length ? 'Next Question →' : 'See Results'}</button>
+      </div>
+    `;
+    updateScorePanel();
+  } catch (e) {
+    document.getElementById('laFeedback').innerHTML = `
+      <div class="feedback warn">
+        <strong>Evaluation failed:</strong> ${escapeHtml(e.message)}<br><br>
+        Make sure Ollama is running with OLLAMA_ORIGINS=* and the model "<code>${getModel()}</code>" is pulled.
+      </div>
+      <div class="actions">
+        <button class="btn secondary" onclick="document.getElementById('laSubmit').disabled=false; document.getElementById('laSubmit').textContent='Retry Evaluation';">Retry</button>
+      </div>
+    `;
+  }
+}
+
+function nextLA() { state.currentLA.index++; renderLA(); }
+
+function renderLADone() {
+  const c = state.currentLA;
+  document.getElementById('laContent').innerHTML = `
+    <div class="feedback info">
+      <strong>Session complete!</strong><br>
+      ${c.correct} / ${c.pool.length} answered at passing threshold.
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="startLA()">Retry</button>
+      <button class="btn secondary" onclick="showTab('score')">View Score</button>
+    </div>
+  `;
+}
+
+/* ============================================================
+   FULL QUIZ
+   ============================================================ */
+function shuffle(a) { return a.slice().sort(() => Math.random() - 0.5); }
+
+function startFullQuiz() {
+  const mc = shuffle(QUESTIONS.mc).slice(0, 5);
+  const sa = shuffle(QUESTIONS.sa).slice(0, 2);
+  const la = shuffle(QUESTIONS.la).slice(0, 1);
+  state.quizMode = true;
+  state.currentMC = { pool: mc, index: 0, correct: 0 };
+  state.currentSA = { pool: sa, index: 0, correct: 0 };
+  state.currentLA = { pool: la, index: 0, correct: 0 };
+  document.getElementById('quizContent').innerHTML = `
+    <div class="feedback info">
+      <strong>Quiz started!</strong> Switch to the Multiple Choice tab, then Short Answer, then Long Answer.
+    </div>
+  `;
+  showTab('mc');
+  renderMC();
+}
+
+function resetQuiz() {
+  state.quizMode = false;
+  document.getElementById('quizContent').innerHTML = '';
+  document.getElementById('mcContent').innerHTML = '';
+  document.getElementById('saContent').innerHTML = '';
+  document.getElementById('laContent').innerHTML = '';
+}
+
+/* ============================================================
+   SCORE
+   ============================================================ */
+function updateScorePanel() {
+  const pct = state.score.total > 0 ? Math.round((state.score.correct / state.score.total) * 100) : 0;
+  document.getElementById('scoreContent').innerHTML = `
+    <div style="display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1rem;">
+      <span class="score-badge">Attempted: <strong>${state.score.total}</strong></span>
+      <span class="score-badge">Correct: <strong>${state.score.correct}</strong></span>
+      <span class="score-badge">Percentage: <strong>${pct}%</strong></span>
+    </div>
+    <div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
+    <p class="help-text" style="margin-top:1rem;">
+      ${state.score.total === 0 ? 'No questions attempted yet.' :
+        pct >= 90 ? '🏆 Excellent — strong mastery.' :
+        pct >= 70 ? '👍 Good — review the missed topics.' :
+                    '📚 Keep studying — focus on weak areas.'}
+    </p>
+  `;
+}
+
+function resetAllScores() {
+  state.score = { correct: 0, total: 0 };
+  updateScorePanel();
+}
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+populateTopicSelects();
+renderDiagramGrid();
+initStudyFilters();
+buildStudyList();
+updateScorePanel();
+
+window.addEventListener('load', () => {
+  setTimeout(testConnection, 500);
+});
+</script>
+</body>
+</html>
