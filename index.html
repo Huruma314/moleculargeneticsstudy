@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIOL4103 – Population Structure Study Guide</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f4f7fa;
+            color: #1e2b3c;
+            line-height: 1.7;
+            padding: 2rem 1.5rem;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 2.5rem 2.5rem;
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0b3b5c;
+            border-bottom: 4px solid #3a8fc2;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+        }
+        .subtitle {
+            font-size: 1rem;
+            color: #4a6f8a;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0b3b5c;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-left: 0.75rem;
+            border-left: 5px solid #3a8fc2;
+        }
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #1f4e72;
+            margin-top: 1.8rem;
+            margin-bottom: 0.75rem;
+        }
+        h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #2a6496;
+            margin-top: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .qa-block {
+            background: #f9fcff;
+            border: 1px solid #dce8f2;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .qa-block .question {
+            font-weight: 600;
+            color: #0b3b5c;
+            margin-bottom: 0.5rem;
+            font-size: 1.02rem;
+        }
+        .answer {
+            color: #1e3a4f;
+            font-size: 0.98rem;
+            padding-left: 0.5rem;
+            border-left: 3px solid #7ab8d9;
+            padding-top: 0.15rem;
+            padding-bottom: 0.15rem;
+            padding-right: 0.5rem;
+            background: #eef7fd;
+            border-radius: 0 6px 6px 0;
+            margin-top: 0.4rem;
+        }
+        .answer strong {
+            color: #0b5e8a;
+        }
+        .sub-questions {
+            margin: 0.8rem 0 0.4rem 0;
+            padding-left: 0.5rem;
+        }
+        .sub-questions p {
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            color: #1f4e72;
+        }
+        .sub-questions .sub-label {
+            font-weight: 700;
+            color: #0b3b5c;
+            margin-right: 0.3rem;
+        }
+        .formula-highlight {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0 1.5rem 0;
+            text-align: center;
+        }
+        .formula-highlight .formula-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #856404;
+            margin-bottom: 0.4rem;
+        }
+        .formula-highlight .formula-main {
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0b3b5c;
+        }
+        .formula-highlight .formula-desc {
+            font-size: 0.88rem;
+            color: #5c4a1e;
+            margin-top: 0.3rem;
+        }
+        .calc-step {
+            margin-bottom: 0.8rem;
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+        }
+        .calc-step.formula-step {
+            background: #e2f0fb;
+            border-left: 4px solid #3a8fc2;
+        }
+        .calc-step.substitution-step {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+        .calc-step.result-step {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+        }
+        .calc-step-title {
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.2rem;
+            color: #4a6f8a;
+        }
+        .formula-text {
+            font-family: 'Courier New', monospace;
+            font-size: 1.05rem;
+            color: #1e3a4f;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0 1.25rem 0;
+            font-size: 0.92rem;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        th {
+            background: #1f4e72;
+            color: #ffffff;
+            font-weight: 600;
+            padding: 0.6rem 0.8rem;
+            text-align: center;
+            font-size: 0.88rem;
+        }
+        td {
+            padding: 0.55rem 0.8rem;
+            border-bottom: 1px solid #e2edf5;
+            text-align: center;
+        }
+        tr:nth-child(even) td {
+            background: #f6fafd;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .formula {
+            font-family: 'Courier New', monospace;
+            background: #eef4f9;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            color: #0b3b5c;
+            white-space: nowrap;
+        }
+        .formula-block {
+            background: #eef4f9;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: #0b3b5c;
+            margin: 0.75rem 0;
+            overflow-x: auto;
+        }
+        .note {
+            background: #fff8e6;
+            border-left: 4px solid #e6a817;
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+            color: #5c4a1e;
+        }
+        .highlight {
+            background: #d4edda;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-weight: 600;
+            color: #155724;
+        }
+        .section-intro {
+            color: #3a5f7a;
+            font-style: italic;
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
+        }
+        ul, ol {
+            padding-left: 1.5rem;
+            margin: 0.5rem 0;
+        }
+        li {
+            margin-bottom: 0.3rem;
+        }
+        .tag {
+            display: inline-block;
+            background: #1f4e72;
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.15rem 0.6rem;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+            margin-right: 0.5rem;
+            vertical-align: middle;
+        }
+        .tag.green {
+            background: #2e7d32;
+        }
+        .tag.orange {
+            background: #e65100;
+        }
+        .divider {
+            border: none;
+            border-top: 2px dashed #cde0ee;
+            margin: 2rem 0;
+        }
+        .footer-note {
+            text-align: center;
+            color: #6b8ba3;
+            font-size: 0.85rem;
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #dce8f2;
+        }
+
+        /* Toggle button styles */
+        .toggle-btn {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 9999;
+            background: #1f4e72;
+            color: #ffffff;
+            border: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: inherit;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(31, 78, 114, 0.4);
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            user-select: none;
+        }
+        .toggle-btn:hover {
+            background: #2a6496;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 28px rgba(31, 78, 114, 0.5);
+        }
+        .toggle-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(31, 78, 114, 0.4);
+        }
+        .toggle-btn.hidden-state {
+            background: #2e7d32;
+        }
+        .toggle-btn.hidden-state:hover {
+            background: #388e3c;
+        }
+        body.answers-hidden .answer {
+            display: none;
+        }
+        body.answers-hidden .qa-block::after {
+            content: "🔒 Answer hidden — click the button to reveal";
+            display: block;
+            font-size: 0.78rem;
+            font-style: italic;
+            color: #8aa8bf;
+            margin-top: 0.6rem;
+            padding-left: 0.5rem;
+            border-left: 3px dashed #cde0ee;
+        }
+        @media (max-width: 700px) {
+            body { padding: 1rem 0.75rem; }
+            .container { padding: 1.5rem 1rem; }
+            h1 { font-size: 1.6rem; }
+            h2 { font-size: 1.25rem; }
+            table { font-size: 0.8rem; }
+            th, td { padding: 0.4rem 0.5rem; }
+            .toggle-btn {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.7rem 1.1rem;
+                font-size: 0.82rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<button id="toggleAnswers" class="toggle-btn" aria-pressed="false" title="Show or hide all answers">
+    <span id="toggleIcon">🙈</span>
+    <span id="toggleText">Hide Answers</span>
+</button>
+
+<div class="container">
+
+    <h1>BIOL4103 – Population Structure Study Guide</h1>
+    <p class="subtitle">Compiled from: Worksheet 4, Week 5 Practice Questions, and Week 5 Lecture Slides</p>
+
+    <!-- DOCUMENT 1 -->
+    <h2>📄 Document 1: Worksheet 4 – Population Structure Activity</h2>
+
+    <div class="qa-block">
+        <div class="question">1. You will work with your group on two sub-populations today! From each of these, you will sample 10 individuals (with replacement). Write down the genotypes for each individual in the table below. Name your alleles appropriately so you can keep track of them!</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Ind1</th>
+                    <th>Ind2</th>
+                    <th>Ind3</th>
+                    <th>Ind4</th>
+                    <th>Ind5</th>
+                    <th>Ind6</th>
+                    <th>Ind7</th>
+                    <th>Ind8</th>
+                    <th>Ind9</th>
+                    <th>Ind10</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Site A</strong></td>
+                    <td>BB</td>
+                    <td>BB</td>
+                    <td>BB</td>
+                    <td>BB</td>
+                    <td>BG</td>
+                    <td>BG</td>
+                    <td>GG</td>
+                    <td>BB</td>
+                    <td>BB</td>
+                    <td>BB</td>
+                </tr>
+                <tr>
+                    <td><strong>Site B</strong></td>
+                    <td>GG</td>
+                    <td>GG</td>
+                    <td>GG</td>
+                    <td>GG</td>
+                    <td>GG</td>
+                    <td>GG</td>
+                    <td>GG</td>
+                    <td>GG</td>
+                    <td>GG</td>
+                    <td>GG</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="answer">
+            <strong>Note:</strong> The genotypes shown above are reconstructed from the allele frequency calculations in Question 2. Site A contains 7 BB, 2 BG, and 1 GG individual. Site B contains 10 GG individuals.
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">2. Calculate the allele frequencies for each sub-population, and the entire population.</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>B</th>
+                    <th>G</th>
+                    <th>Allele 1</th>
+                    <th>Allele 2</th>
+                    <th>Allele 3</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Site A</strong></td>
+                    <td>0.8</td>
+                    <td>0.2</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><strong>Site B</strong></td>
+                    <td>0</td>
+                    <td>1.0</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td>0.4</td>
+                    <td>0.6</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="answer">
+            <strong>Site A:</strong><br>
+            B alleles = 7×2 + 2 = 16 → 16/20 = <strong>0.8</strong><br>
+            G alleles = 1×2 + 2 = 4 → 4/20 = <strong>0.2</strong><br><br>
+            <strong>Site B:</strong><br>
+            B alleles = 0<br>
+            G alleles = 10 → 20/20 = <strong>1.0</strong><br><br>
+            <strong>Total (20 individuals → 40 alleles):</strong><br>
+            B = 16/40 = <strong>0.4</strong><br>
+            G = 24/40 = <strong>0.6</strong>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">3. Using the genotype and allele frequency data calculate Hardy-Weinberg equilibrium for the entire population.</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Genotype</th>
+                    <th>Observed</th>
+                    <th>Expected genotype</th>
+                    <th>(Obs − Exp)²</th>
+                    <th>(Obs − Exp)² / Exp</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1-1 (BB)</td>
+                    <td>7</td>
+                    <td>3.2</td>
+                    <td>14.44</td>
+                    <td>4.5125</td>
+                </tr>
+                <tr>
+                    <td>1-2 (BG)</td>
+                    <td>2</td>
+                    <td>9.6</td>
+                    <td>57.76</td>
+                    <td>6.0167</td>
+                </tr>
+                <tr>
+                    <td>1-3</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>2-2 (GG)</td>
+                    <td>11</td>
+                    <td>7.2</td>
+                    <td>14.44</td>
+                    <td>2.0056</td>
+                </tr>
+                <tr>
+                    <td>2-3</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>3-3</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="answer">
+            <strong>p = freq(B) = 0.4</strong><br>
+            <strong>q = freq(G) = 0.6</strong><br><br>
+            <span class="formula">BB: p² = (0.4)² = 0.16 × 20 = 3.2</span><br>
+            <span class="formula">BG: 2pq = 2(0.4)(0.6) = 0.48 × 20 = 9.6</span><br>
+            <span class="formula">GG: q² = (0.6)² = 0.36 × 20 = 7.2</span><br><br>
+            <strong>Chi-square calculation:</strong><br>
+            <span class="formula">X² = Σ [(Obs − Exp)² / Exp] = 4.5125 + 6.0167 + 2.0056 = 12.53</span><br><br>
+            <strong>Degrees of freedom (DoF):</strong> 1 (3 genotypes − 2 alleles)<br>
+            <span class="formula">X²(0.05, 1) = 3.84</span><br><br>
+            <span class="highlight">Since 12.53 > 3.84, we reject Hardy-Weinberg Equilibrium (HWE).</span>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">4. Was the entire population in Hardy-Weinberg equilibrium? If it is not in equilibrium explain what principle was violated, and what mechanism led to the deviation from equilibrium.</div>
+        <div class="answer">
+            <strong>No, the population was not in HWE.</strong> The principle that would have been violated is the HWE assumption of <strong>random mating</strong>, since pooling two subpopulations with different allele frequencies would cause a <strong>heterozygote deficit</strong>.
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">5. What is your "muddiest" concept from this week's lecture (what material would you like to review again?)</div>
+        <div class="answer">
+            The muddiest concept would be how to interpret the different <strong>F-statistics</strong> and how they relate to heterozygosity measures.
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- DOCUMENT 2 -->
+    <h2>📝 Document 2: Week 5 Practice Questions – Population Structure</h2>
+
+    <h3>Part A: Population Structure</h3>
+
+    <div class="qa-block">
+        <div class="question">1. Define population structure in your own words.</div>
+        <div class="answer">
+            Subdivision of a species into partially isolated groups that exchange limited genes.
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">2. Give two biological processes that may lead to population structure.</div>
+        <div class="answer">
+            Any two of the following:
+            <ul>
+                <li>Geographic isolation</li>
+                <li>Habitat fragmentation</li>
+                <li>Limited dispersal</li>
+                <li>Genetic drift</li>
+                <li>Barriers to movement</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">3. Why can population structure cause deviations from Hardy-Weinberg expectations?</div>
+        <div class="answer">
+            Causes <strong>non-random mating</strong> at the total population level and often <strong>reduces heterozygosity</strong>.
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">4. Two populations have the following allele frequencies:</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Population</th>
+                    <th>Frequency of A</th>
+                    <th>Frequency of T</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>0.80</td>
+                    <td>0.20</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>0.82</td>
+                    <td>0.18</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="question" style="margin-top:0.5rem;">Would you expect high or low genetic differentiation between these populations? Explain.</div>
+        <div class="answer">
+            <strong>Low differentiation</strong> because allele frequencies are very similar.
+        </div>
+    </div>
+
+    <h3>Part B: Heterozygosity Calculations</h3>
+
+    <div class="formula-highlight">
+        <div class="formula-label">⭐ Key Formula: Observed Heterozygosity</div>
+        <div class="formula-main">H<sub>I</sub> = Number of heterozygotes / Total number of individuals</div>
+        <div class="formula-desc">This is the proportion of individuals in a sample that are heterozygous at a given locus.</div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">5. A sample of 50 individuals has the following genotype counts:</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Genotype</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>CC</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <td>CT</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <td>TT</td>
+                    <td>10</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="question" style="margin-top:0.5rem;">Calculate observed heterozygosity (H<sub>I</sub>).</div>
+        <div class="answer">
+            <div class="calc-step formula-step">
+                <div class="calc-step-title">Step 1: Formula</div>
+                <div class="formula-text">H<sub>I</sub> = Number of heterozygotes / Total number of individuals</div>
+            </div>
+            <div class="calc-step substitution-step">
+                <div class="calc-step-title">Step 2: Substitute the numbers</div>
+                <div class="formula-text">H<sub>I</sub> = 20 / 50</div>
+            </div>
+            <div class="calc-step result-step">
+                <div class="calc-step-title">Step 3: Calculate</div>
+                <div class="formula-text"><strong>H<sub>I</sub> = 0.40</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">6. Using the data above, calculate: a) p &nbsp; b) q</div>
+        <div class="answer">
+
+            <div class="calc-step formula-step">
+                <div class="calc-step-title">Step 1: Count the C alleles</div>
+                <div class="formula-text">Each CC individual has 2 C alleles: 20 × 2 = 40 C alleles</div>
+                <div class="formula-text">Each CT individual has 1 C allele: 20 × 1 = 20 C alleles</div>
+                <div class="formula-text">Total C alleles = 40 + 20 = <strong>60 C alleles</strong></div>
+            </div>
+
+            <div class="calc-step formula-step">
+                <div class="calc-step-title">Step 2: Count the T alleles</div>
+                <div class="formula-text">Each TT individual has 2 T alleles: 10 × 2 = 20 T alleles</div>
+                <div class="formula-text">Each CT individual has 1 T allele: 20 × 1 = 20 T alleles</div>
+                <div class="formula-text">Total T alleles = 20 + 20 = <strong>40 T alleles</strong></div>
+            </div>
+
+            <div class="calc-step formula-step">
+                <div class="calc-step-title">Step 3: Count total alleles in the population</div>
+                <div class="formula-text">Total alleles = 60 (C) + 40 (T) = <strong>100 alleles</strong></div>
+                <div class="formula-text">(Equivalently: 50 individuals × 2 alleles each = 100 alleles)</div>
+            </div>
+
+            <div class="calc-step substitution-step">
+                <div class="calc-step-title">Step 4: Calculate p (frequency of C)</div>
+                <div class="formula-text">p = Total C alleles / Total alleles = 60 / 100</div>
+            </div>
+
+            <div class="calc-step result-step">
+                <div class="calc-step-title">Step 5: Calculate q (frequency of T)</div>
+                <div class="formula-text">q = Total T alleles / Total alleles = 40 / 100</div>
+                <div class="formula-text"><strong>p = 0.60 &nbsp;&nbsp; q = 0.40</strong></div>
+            </div>
+
+            <div style="margin-top:1rem; padding:0.75rem; background:#f0f8ff; border-radius:8px; border-left:4px solid #3a8fc2;">
+                <strong>Alternative formula method (same result):</strong><br>
+                <span class="formula">p = (2 × CC + CT) / (2 × N) = (2 × 20 + 20) / (2 × 50) = 60 / 100 = 0.60</span><br>
+                <span class="formula">q = (2 × TT + CT) / (2 × N) = (2 × 10 + 20) / (2 × 50) = 40 / 100 = 0.40</span>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">7. Using your values of p and q, calculate: H<sub>S</sub> = 2pq</div>
+        <div class="answer">
+            <div class="calc-step formula-step">
+                <div class="calc-step-title">Step 1: Formula</div>
+                <div class="formula-text">H<sub>S</sub> = 2 × p × q</div>
+            </div>
+            <div class="calc-step substitution-step">
+                <div class="calc-step-title">Step 2: Substitute the numbers</div>
+                <div class="formula-text">H<sub>S</sub> = 2 × (0.60) × (0.40)</div>
+            </div>
+            <div class="calc-step result-step">
+                <div class="calc-step-title">Step 3: Calculate</div>
+                <div class="formula-text"><strong>H<sub>S</sub> = 0.48</strong></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">8. Compare your values of H<sub>I</sub> and H<sub>S</sub>. Do they suggest: heterozygote excess, heterozygote deficit, or Hardy-Weinberg equilibrium? Explain your answer.</div>
+        <div class="answer">
+            <strong>Heterozygote deficit.</strong> H<sub>I</sub> (0.40) is less than H<sub>S</sub> (0.48), meaning there are fewer heterozygotes observed than expected under HWE.
+        </div>
+    </div>
+
+    <h3>Part C: F<sub>IS</sub> Practice</h3>
+
+    <div class="qa-block">
+        <div class="question">9. A population has: H<sub>I</sub> = 0.30, H<sub>S</sub> = 0.45. Calculate F<sub>IS</sub>.</div>
+        <div class="answer">
+            <span class="formula">F<sub>IS</sub> = (H<sub>S</sub> − H<sub>I</sub>) / H<sub>S</sub> = (0.45 − 0.30) / 0.45 = <strong>0.33</strong></span>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">10. If F<sub>IS</sub> = 0.33: a) Is this positive or negative? b) What does it indicate about heterozygosity? c) Give one biological explanation.</div>
+        <div class="answer">
+            a) <strong>Positive</strong><br>
+            b) <strong>Deficit of heterozygotes</strong><br>
+            c) Possible <strong>inbreeding</strong> or <strong>population structure</strong>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">11. Opposite scenario: A population has (values implied from answer key) — Calculate F<sub>IS</sub>. Would this indicate a heterozygote excess or deficit?</div>
+        <div class="answer">
+            <span class="formula">F<sub>IS</sub> = <strong>−0.25</strong></span><br>
+            This indicates a <strong>heterozygote excess</strong>.
+        </div>
+    </div>
+
+    <h3>Part D: F<sub>ST</sub> and Genetic Differentiation</h3>
+
+    <div class="qa-block">
+        <div class="question">12. Match each F<sub>ST</sub> value to the appropriate interpretation.</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>F<sub>ST</sub></th>
+                    <th>Interpretation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0.01</td>
+                    <td>Low differentiation</td>
+                </tr>
+                <tr>
+                    <td>0.12</td>
+                    <td>Moderate differentiation</td>
+                </tr>
+                <tr>
+                    <td>0.35</td>
+                    <td>High differentiation</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="answer">
+            <strong>0.01 → Low</strong> &nbsp;|&nbsp; <strong>0.12 → Moderate</strong> &nbsp;|&nbsp; <strong>0.35 → High</strong>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">13. How would strong genetic drift in small populations affect F<sub>ST</sub>?</div>
+        <div class="answer">
+            <strong>Increase F<sub>ST</sub>.</strong>
+        </div>
+    </div>
+
+    <h3>Part E: Integrated Problems</h3>
+
+    <div class="qa-block">
+        <div class="question">14. A sample of 100 individuals has:</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Genotype</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>AA</td>
+                    <td>36</td>
+                </tr>
+                <tr>
+                    <td>Aa</td>
+                    <td>48</td>
+                </tr>
+                <tr>
+                    <td>aa</td>
+                    <td>16</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="question" style="margin-top:0.5rem;">Calculate:</div>
+
+        <div class="sub-questions">
+            <p><span class="sub-label">a)</span> Observed heterozygosity (H<sub>I</sub>) = ?</p>
+            <p><span class="sub-label">b)</span> Allele frequencies: p = ? &nbsp; q = ?</p>
+            <p><span class="sub-label">c)</span> Expected heterozygosity (H<sub>S</sub>) = ?</p>
+            <p><span class="sub-label">d)</span> F<sub>IS</sub> = ?</p>
+            <p><span class="sub-label">e)</span> Biological interpretation: ?</p>
+        </div>
+
+        <div class="answer">
+            <div class="calc-step formula-step">
+                <div class="calc-step-title">Step 1: Calculate Observed Heterozygosity (H<sub>I</sub>)</div>
+                <div class="formula-text">H<sub>I</sub> = Number of heterozygotes / Total individuals</div>
+                <div class="formula-text">H<sub>I</sub> = 48 / 100 = <strong>0.48</strong></div>
+            </div>
+
+            <div class="calc-step formula-step">
+                <div class="calc-step-title">Step 2: Count the total number of alleles in the population</div>
+                <div class="formula-text">Since each individual is diploid, they carry 2 alleles per locus.</div>
+                <div class="formula-text">Total alleles = Number of individuals × 2 = 100 × 2 = <strong>200 alleles</strong></div>
+            </div>
+
+            <div class="calc-step formula-step">
+                <div class="calc-step-title">Step 3: Count the A alleles (for p)</div>
+                <div class="formula-text">Each AA individual has 2 A alleles: 36 × 2 = 72 A alleles</div>
+                <div class="formula-text">Each Aa individual has 1 A allele: 48 × 1 = 48 A alleles</div>
+                <div class="formula-text">Total A alleles = 72 + 48 = <strong>120 A alleles</strong></div>
+            </div>
+
+            <div class="calc-step formula-step">
+                <div class="calc-step-title">Step 4: Count the a alleles (for q)</div>
+                <div class="formula-text">Each aa individual has 2 a alleles: 16 × 2 = 32 a alleles</div>
+                <div class="formula-text">Each Aa individual has 1 a allele: 48 × 1 = 48 a alleles</div>
+                <div class="formula-text">Total a alleles = 32 + 48 = <strong>80 a alleles</strong></div>
+            </div>
+
+            <div class="calc-step substitution-step">
+                <div class="calc-step-title">Step 5: Calculate p and q</div>
+                <div class="formula-text">p = Total A alleles / Total alleles = 120 / 200 = <strong>0.60</strong></div>
+                <div class="formula-text">q = Total a alleles / Total alleles = 80 / 200 = <strong>0.40</strong></div>
+            </div>
+
+            <div class="calc-step formula-step">
+                <div class="calc-step-title">Step 6: Calculate Expected Heterozygosity (H<sub>S</sub>)</div>
+                <div class="formula-text">H<sub>S</sub> = 2 × p × q = 2 × (0.60) × (0.40) = <strong>0.48</strong></div>
+            </div>
+
+            <div class="calc-step result-step">
+                <div class="calc-step-title">Step 7: Calculate F<sub>IS</sub></div>
+                <div class="formula-text">F<sub>IS</sub> = (H<sub>S</sub> − H<sub>I</sub>) / H<sub>S</sub> = (0.48 − 0.48) / 0.48 = <strong>0</strong></div>
+            </div>
+
+            <div class="calc-step result-step">
+                <div class="calc-step-title">Step 8: Biological Interpretation</div>
+                <div class="formula-text">Since F<sub>IS</sub> = 0, the population is consistent with <strong>Hardy-Weinberg equilibrium</strong>.</div>
+            </div>
+        </div>
+    </div>
+
+    <h3>Challenge Questions</h3>
+
+    <div class="qa-block">
+        <div class="question">15. Two populations have:</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Population</th>
+                    <th>N<sub>e</sub></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>A</td>
+                    <td>50</td>
+                </tr>
+                <tr>
+                    <td>B</td>
+                    <td>2,000</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="question" style="margin-top:0.5rem;">Which population would you expect to: a) experience stronger drift? b) lose genetic diversity more rapidly? c) show larger year-to-year fluctuations in allele frequency? Explain your answers.</div>
+        <div class="answer">
+            <strong>Population A</strong> for all three. Smaller populations (lower N<sub>e</sub>) experience stronger genetic drift, lose genetic diversity more rapidly, and show larger fluctuations in allele frequencies due to sampling error.
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">16. Designing a Study: You suspect a forest pest has fragmented a tree population into several isolated patches. What data would you collect to determine whether population structure has increased over time?</div>
+        <div class="answer">
+            Examples include:
+            <ul>
+                <li>Allele frequencies</li>
+                <li>Heterozygosity</li>
+                <li>F<sub>ST</sub></li>
+                <li>SNP or microsatellite data through time</li>
+            </ul>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- DOCUMENT 3 -->
+    <h2>🎓 Document 3: Week 5 Lecture Slides – Population Structure</h2>
+
+    <div class="qa-block">
+        <div class="question">Slide 2: You now have two different sites where your species lives!</div>
+        <div class="answer">
+            <strong>1.</strong> Sample 10 individuals (with replacement) from each site and write down the genotypes for each sampled individual.<br>
+            <strong>2.</strong> Calculate the allele frequencies for each site and for the entire population (you might have more than two alleles in your population, name them appropriately so you can keep track of all the genotypes).
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">Slide 3: Calculate whether the population is in HWE (use the allele frequencies for the TOTAL population).</div>
+        <div class="formula-block">
+            X² = Σ<sub>i</sub> [ob(N<sub>i</sub>) − ex(N<sub>i</sub>)]² / ex(N<sub>i</sub>)
+        </div>
+        <div class="answer">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Genotypes</th>
+                        <th>Site A</th>
+                        <th>Site B</th>
+                        <th>Total Observed</th>
+                        <th>Expected</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>BB</td>
+                        <td>7</td>
+                        <td>0</td>
+                        <td>7</td>
+                        <td>3.2</td>
+                    </tr>
+                    <tr>
+                        <td>BG</td>
+                        <td>2</td>
+                        <td>0</td>
+                        <td>2</td>
+                        <td>9.6</td>
+                    </tr>
+                    <tr>
+                        <td>GG</td>
+                        <td>1</td>
+                        <td>10</td>
+                        <td>11</td>
+                        <td>7.2</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="calc-step formula-step">
+                <div class="calc-step-title">Step 0: Calculate Expected Counts from Allele Frequencies</div>
+                <div class="formula-text">Total population allele frequencies: p = freq(B) = 0.4, q = freq(G) = 0.6</div>
+                <div class="formula-text">Total number of individuals = 20</div>
+                <div style="margin-top:0.6rem;"></div>
+                <div class="formula-text"><strong>BB expected:</strong> p² × N = (0.4)² × 20 = 0.16 × 20 = 3.2</div>
+                <div class="formula-text"><strong>BG expected:</strong> 2pq × N = 2(0.4)(0.6) × 20 = 0.48 × 20 = 9.6</div>
+                <div class="formula-text"><strong>GG expected:</strong> q² × N = (0.6)² × 20 = 0.36 × 20 = 7.2</div>
+            </div>
+
+            <div class="calc-step formula-step">
+                <div class="calc-step-title">Step 1: Chi-square formula</div>
+                <div class="formula-text">X² = Σ [(Obs − Exp)² / Exp]</div>
+            </div>
+
+            <div class="calc-step substitution-step">
+                <div class="calc-step-title">Step 2: Calculate for BB genotype</div>
+                <div class="formula-text">Obs = 7, Exp = 3.2</div>
+                <div class="formula-text">(7 − 3.2)² / 3.2 = (3.8)² / 3.2 = 14.44 / 3.2 = <strong>4.5125</strong></div>
+            </div>
+
+            <div class="calc-step substitution-step">
+                <div class="calc-step-title">Step 3: Calculate for BG genotype</div>
+                <div class="formula-text">Obs = 2, Exp = 9.6</div>
+                <div class="formula-text">(2 − 9.6)² / 9.6 = (−7.6)² / 9.6 = 57.76 / 9.6 = <strong>6.0167</strong></div>
+            </div>
+
+            <div class="calc-step substitution-step">
+                <div class="calc-step-title">Step 4: Calculate for GG genotype</div>
+                <div class="formula-text">Obs = 11, Exp = 7.2</div>
+                <div class="formula-text">(11 − 7.2)² / 7.2 = (3.8)² / 7.2 = 14.44 / 7.2 = <strong>2.0056</strong></div>
+            </div>
+
+            <div class="calc-step result-step">
+                <div class="calc-step-title">Step 5: Sum all values</div>
+                <div class="formula-text">X² = 4.5125 + 6.0167 + 2.0056 = <strong>12.53</strong></div>
+            </div>
+
+            <div class="highlight" style="margin-top:1rem;">
+                Since 12.53 > 3.84 (X² critical at 0.05, 1 df), reject HWE.
+            </div>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">Slide 4: What assumption of HWE is being violated?</div>
+        <div class="answer">
+            The assumption of <strong>random mating</strong> is being violated. When two subpopulations with different allele frequencies are pooled, the total population shows a heterozygote deficit because mating is not random across the entire population.
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">Slide 5: What mechanisms might lead to population structure?</div>
+        <div class="answer">
+            <ul>
+                <li>Geographic isolation</li>
+                <li>Habitat fragmentation</li>
+                <li>Limited dispersal</li>
+                <li>Genetic drift</li>
+                <li>Barriers to movement</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">Slide 6: In a structured population, subdivision may occur at different spatial or geographic scales leading to progressively different levels of differentiation that are nested within each other. Can you think of examples where there may be a hierarchy of population structure?</div>
+        <div class="answer">
+            Examples include:
+            <ul>
+                <li>A continent containing multiple regions, each region containing multiple populations, each population containing multiple family groups.</li>
+                <li>A species with subspecies, where each subspecies contains multiple populations, and each population contains subpopulations.</li>
+                <li>An island archipelago where islands are nested within island groups, which are nested within the overall metapopulation.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">Slide 17: How do we relate different H values to population differences?</div>
+        <div class="answer">
+            If there is <strong>no population structure</strong> (everything is in HWE), then <span class="formula">H<sub>I</sub> = H<sub>T</sub> = H<sub>S</sub></span>.<br><br>
+            If there <strong>is structure</strong>, then heterozygosities will not be the same, and how they differ tells us about the nature of population structure:
+            <ul>
+                <li><span class="formula">F<sub>ST</sub> = (H<sub>T</sub> − H<sub>S</sub>) / H<sub>T</sub></span> — differentiation among subpopulations</li>
+                <li><span class="formula">F<sub>IS</sub> = (H<sub>S</sub> − H<sub>I</sub>) / H<sub>S</sub></span> — deviation from HWE within subpopulations</li>
+                <li><span class="formula">F<sub>IT</sub> = (H<sub>T</sub> − H<sub>I</sub>) / H<sub>T</sub></span> — deviation from HWE in the total population</li>
+            </ul>
+            Also: <span class="formula">1 − F<sub>IT</sub> = (1 − F<sub>ST</sub>)(1 − F<sub>IS</sub>)</span>
+        </div>
+    </div>
+
+    <h3>Lecture Example 1 (Slides 14–16)</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Subpop</th>
+                <th>p</th>
+                <th>A<sub>1</sub>A<sub>1</sub></th>
+                <th>A<sub>1</sub>A<sub>2</sub></th>
+                <th>A<sub>2</sub>A<sub>2</sub></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>0.50</td>
+                <td>0.25</td>
+                <td>0.50</td>
+                <td>0.25</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>0.50</td>
+                <td>0.35</td>
+                <td>0.30</td>
+                <td>0.35</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="answer">
+        <div class="calc-step formula-step">
+            <div class="calc-step-title">Step 1: Calculate H<sub>I</sub> (Average observed heterozygosity)</div>
+            <div class="formula-text">H<sub>I,1</sub> = 0.50</div>
+            <div class="formula-text">H<sub>I,2</sub> = 0.30</div>
+            <div class="formula-text">H<sub>I</sub> = (0.50 + 0.30) / 2 = <strong>0.40</strong></div>
+        </div>
+        <div class="calc-step formula-step" style="margin-top:1rem;">
+            <div class="calc-step-title">Step 2: Calculate H<sub>S</sub> (Average expected heterozygosity)</div>
+            <div class="formula-text">H<sub>S,1</sub> = 2pq = 2(0.50)(0.50) = 0.50</div>
+            <div class="formula-text">H<sub>S,2</sub> = 2pq = 2(0.50)(0.50) = 0.50</div>
+            <div class="formula-text">H<sub>S</sub> = (0.50 + 0.50) / 2 = <strong>0.50</strong></div>
+        </div>
+        <div class="calc-step formula-step" style="margin-top:1rem;">
+            <div class="calc-step-title">Step 3: Calculate H<sub>T</sub> (Expected heterozygosity for total population)</div>
+            <div class="formula-text">Average p = (0.50 + 0.50) / 2 = 0.50</div>
+            <div class="formula-text">H<sub>T</sub> = 2(0.50)(0.50) = <strong>0.50</strong></div>
+        </div>
+        <div class="calc-step result-step" style="margin-top:1rem;">
+            <div class="calc-step-title">Step 4: Calculate F-statistics</div>
+            <div class="formula-text">F<sub>ST</sub> = (H<sub>T</sub> − H<sub>S</sub>) / H<sub>T</sub> = (0.50 − 0.50) / 0.50 = <strong>0.00</strong></div>
+            <div class="formula-text">F<sub>IS</sub> = (H<sub>S</sub> − H<sub>I</sub>) / H<sub>S</sub> = (0.50 − 0.40) / 0.50 = <strong>0.20</strong></div>
+            <div class="formula-text">F<sub>IT</sub> = (H<sub>T</sub> − H<sub>I</sub>) / H<sub>T</sub> = (0.50 − 0.40) / 0.50 = <strong>0.20</strong></div>
+        </div>
+    </div>
+
+    <h3>Lecture Example 2 (Slides 25–28)</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Subpop</th>
+                <th>p</th>
+                <th>A<sub>1</sub>A<sub>1</sub></th>
+                <th>A<sub>1</sub>A<sub>2</sub></th>
+                <th>A<sub>2</sub>A<sub>2</sub></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>0.50</td>
+                <td>0.25</td>
+                <td>0.50</td>
+                <td>0.25</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>0.70</td>
+                <td>0.49</td>
+                <td>0.42</td>
+                <td>0.09</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="answer">
+        <!-- Detailed step-by-step for Example 2 -->
+        <div class="calc-step formula-step">
+            <div class="calc-step-title">Step 1: Calculate H<sub>I</sub> (Average Observed Heterozygosity)</div>
+            <div class="formula-text">This is the average of the heterozygote frequencies (A<sub>1</sub>A<sub>2</sub>) from each subpopulation.</div>
+            <div class="formula-text">H<sub>I,1</sub> = 0.50 (from Subpop 1)</div>
+            <div class="formula-text">H<sub>I,2</sub> = 0.42 (from Subpop 2)</div>
+            <div class="formula-text">H<sub>I</sub> = (0.50 + 0.42) / 2 = <strong>0.46</strong></div>
+        </div>
+
+        <div class="calc-step formula-step" style="margin-top:1rem;">
+            <div class="calc-step-title">Step 2: Calculate H<sub>S</sub> (Average Expected Heterozygosity)</div>
+            <div class="formula-text">You use the formula 2pq for <strong>each subpopulation separately</strong>, then average them.</div>
+            <div class="formula-text">Subpop 1: p = 0.50, q = 0.50 → 2(0.50)(0.50) = 0.50</div>
+            <div class="formula-text">Subpop 2: p = 0.70, q = 0.30 → 2(0.70)(0.30) = 0.42</div>
+            <div class="formula-text">H<sub>S</sub> = (0.50 + 0.42) / 2 = <strong>0.46</strong></div>
+        </div>
+
+        <div class="calc-step formula-step" style="margin-top:1rem;">
+            <div class="calc-step-title">Step 3: Calculate H<sub>T</sub> (Expected Heterozygosity for TOTAL population)</div>
+            <div class="formula-text"><strong>For H<sub>T</sub>, you do NOT use individual subpop frequencies.</strong></div>
+            <div class="formula-text">First, calculate the <strong>average allele frequency</strong> across all subpopulations:</div>
+            <div class="formula-text">Average p = (0.50 + 0.70) / 2 = 0.60</div>
+            <div class="formula-text">Average q = 1 - 0.60 = 0.40</div>
+            <div class="formula-text">Now apply the 2pq formula using these averages:</div>
+            <div class="formula-text">H<sub>T</sub> = 2(0.60)(0.40) = <strong>0.48</strong></div>
+            <div class="formula-text" style="margin-top:0.5rem; color:#0b5e8a;"><strong>Notice:</strong> H<sub>T</sub> (0.48) > H<sub>S</sub> (0.46). This difference is the Wahlund effect.</div>
+        </div>
+
+        <div class="calc-step result-step" style="margin-top:1rem;">
+            <div class="calc-step-title">Step 4: Calculate F-Statistics</div>
+            <div class="formula-text">F<sub>ST</sub> = (H<sub>T</sub> − H<sub>S</sub>) / H<sub>T</sub> = (0.48 − 0.46) / 0.48 = <strong>0.0417</strong></div>
+            <div class="formula-text">F<sub>IS</sub> = (H<sub>S</sub> − H<sub>I</sub>) / H<sub>S</sub> = (0.46 − 0.46) / 0.46 = <strong>0.00</strong></div>
+            <div class="formula-text">F<sub>IT</sub> = (H<sub>T</sub> − H<sub>I</sub>) / H<sub>T</sub> = (0.48 − 0.46) / 0.48 = <strong>0.0417</strong></div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- KEY CONCEPTS SUMMARY -->
+    <h2>📌 Key Concepts & Formulas Summary</h2>
+
+    <div class="formula-highlight">
+        <div class="formula-label">⭐ Observed Heterozygosity (Simple Count Method)</div>
+        <div class="formula-main">H<sub>I</sub> = Number of heterozygotes / Total number of individuals</div>
+        <div class="formula-desc">Use this when you are given genotype counts in a sample.</div>
+    </div>
+
+    <div class="formula-highlight" style="background:#e8f5e9; border-color:#4caf50;">
+        <div class="formula-label" style="color:#2e7d32;">⭐ Allele Frequency (Counting Method)</div>
+        <div class="formula-main" style="color:#1b5e20;">p = (2 × homozygote count + heterozygote count) / (2 × total individuals)</div>
+        <div class="formula-desc" style="color:#2e7d32;">Count each allele individually — each homozygote contributes 2 copies, each heterozygote contributes 1 copy of each allele.</div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">Heterozygosity Measures</div>
+        <div class="answer">
+            <ul>
+                <li><strong>H<sub>I</sub></strong> — average observed heterozygosity across subpopulations</li>
+                <li><strong>H<sub>S</sub></strong> — average expected heterozygosity across subpopulations (if each was randomly mating)</li>
+                <li><strong>H<sub>T</sub></strong> — expected heterozygosity for the total population (if there were no subpopulations)</li>
+            </ul>
+            <span class="formula">H<sub>I</sub> = Number of heterozygotes / Total individuals</span><br>
+            <span class="formula">H<sub>I</sub> = ΣH<sub>ob</sub> / N &nbsp; (across subpopulations)</span><br>
+            <span class="formula">H<sub>S</sub> = ΣH<sub>ex</sub> / N</span><br>
+            <span class="formula">H<sub>T</sub> = 1 − Σ p̄<sub>i</sub>²</span>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">F-Statistics (Fixation Indices)</div>
+        <div class="answer">
+            <ul>
+                <li><strong>F<sub>ST</sub></strong> — measure of differentiation among subpopulations; always positive</li>
+                <li><strong>F<sub>IS</sub></strong> — deviation from HWE within subpopulations (inbreeding/outbreeding); can be positive or negative</li>
+                <li><strong>F<sub>IT</sub></strong> — deviation from HWE in the total population; can be positive or negative</li>
+            </ul>
+            <span class="formula">F<sub>ST</sub> = (H<sub>T</sub> − H<sub>S</sub>) / H<sub>T</sub></span><br>
+            <span class="formula">F<sub>IS</sub> = (H<sub>S</sub> − H<sub>I</sub>) / H<sub>S</sub></span><br>
+            <span class="formula">F<sub>IT</sub> = (H<sub>T</sub> − H<sub>I</sub>) / H<sub>T</sub></span><br><br>
+            <span class="formula">1 − F<sub>IT</sub> = (1 − F<sub>ST</sub>)(1 − F<sub>IS</sub>)</span>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">F<sub>ST</sub> Interpretation Scale</div>
+        <div class="answer">
+            <ul>
+                <li><strong>0 to 0.05</strong> — little genetic differentiation</li>
+                <li><strong>0.05 to 0.15</strong> — moderate genetic differentiation</li>
+                <li><strong>0.15 to 0.25</strong> — great genetic differentiation</li>
+                <li><strong>&gt; 0.25</strong> — very great genetic differentiation</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">F<sub>IS</sub> Interpretation</div>
+        <div class="answer">
+            <ul>
+                <li><strong>Positive F<sub>IS</sub></strong> → heterozygote deficit (possible inbreeding or population structure)</li>
+                <li><strong>Negative F<sub>IS</sub></strong> → heterozygote excess (possible outbreeding)</li>
+                <li><strong>F<sub>IS</sub> = 0</strong> → consistent with Hardy-Weinberg equilibrium</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">Hardy-Weinberg Equilibrium (HWE) Chi-Square Test</div>
+        <div class="answer">
+            <span class="formula">X² = Σ [(Obs − Exp)² / Exp]</span><br><br>
+            <strong>Expected genotype frequencies:</strong><br>
+            <span class="formula">BB: p² &nbsp;|&nbsp; BG: 2pq &nbsp;|&nbsp; GG: q²</span><br><br>
+            <strong>Degrees of freedom:</strong> number of genotypes − number of alleles<br><br>
+            <strong>Critical value:</strong> X²(0.05, 1) = 3.84<br><br>
+            If X² > 3.84, <strong>reject HWE</strong>.
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">Genetic Drift &amp; Population Size</div>
+        <div class="answer">
+            <ul>
+                <li>Smaller populations (lower N<sub>e</sub>) experience <strong>stronger genetic drift</strong></li>
+                <li>Smaller populations <strong>lose genetic diversity more rapidly</strong></li>
+                <li>Smaller populations show <strong>larger year-to-year fluctuations</strong> in allele frequency</li>
+                <li>Strong drift in small populations <strong>increases F<sub>ST</sub></strong></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">Population Structure &amp; HWE</div>
+        <div class="answer">
+            <ul>
+                <li>Population structure causes <strong>non-random mating</strong> at the total population level</li>
+                <li>Pooling subpopulations with different allele frequencies causes a <strong>heterozygote deficit</strong> (Wahlund effect)</li>
+                <li>If there is no structure: <span class="formula">H<sub>I</sub> = H<sub>T</sub> = H<sub>S</sub></span></li>
+                <li>Genetic differentiation is a prerequisite for speciation</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="qa-block">
+        <div class="question">Mechanisms Leading to Population Structure</div>
+        <div class="answer">
+            <ul>
+                <li>Geographic isolation</li>
+                <li>Habitat fragmentation</li>
+                <li>Limited dispersal</li>
+                <li>Genetic drift</li>
+                <li>Barriers to movement</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        BIOL4103 – Population Structure Study Guide · Compiled from Worksheet 4, Week 5 Practice Questions, and Week 5 Lecture Slides
+    </div>
+
+</div>
+
+<script>
+    (function() {
+        const btn = document.getElementById('toggleAnswers');
+        const icon = document.getElementById('toggleIcon');
+        const text = document.getElementById('toggleText');
+
+        btn.addEventListener('click', function() {
+            const isHidden = document.body.classList.toggle('answers-hidden');
+            btn.setAttribute('aria-pressed', isHidden);
+
+            if (isHidden) {
+                icon.textContent = '👁️';
+                text.textContent = 'Show Answers';
+                btn.classList.add('hidden-state');
+            } else {
+                icon.textContent = '🙈';
+                text.textContent = 'Hide Answers';
+                btn.classList.remove('hidden-state');
+            }
+        });
+    })();
+</script>
+
+</body>
+</html>
