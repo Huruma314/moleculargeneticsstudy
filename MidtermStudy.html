@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midterm Exam Study Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --correct-bg: #d1fae5;
+            --correct-border: #10b981;
+            --wrong-bg: #fee2e2;
+            --wrong-border: #ef4444;
+            --border-color: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 50px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            background-color: #f9fafb;
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #1e3a8a;
+            border-bottom: 2px solid #bfdbfe;
+            padding-bottom: 10px;
+        }
+
+        .instruction {
+            background-color: #eff6ff;
+            color: #1e40af;
+            padding: 15px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+            font-size: 0.95rem;
+        }
+
+        /* MCQ Cards */
+        .mcq-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease;
+        }
+
+        .mcq-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .mcq-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        .mcq-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px 0 15px 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .mcq-option {
+            padding: 12px 15px;
+            background-color: #f9fafb;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .mcq-option:hover {
+            background-color: #f3f4f6;
+            border-color: #d1d5db;
+        }
+
+        .mcq-option.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+            color: #065f46;
+            font-weight: 500;
+        }
+
+        .mcq-option.wrong {
+            background-color: var(--wrong-bg);
+            border-color: var(--wrong-border);
+            color: #991b1b;
+            font-weight: 500;
+        }
+
+        .mcq-option.disabled {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        /* Accordion for Text Questions */
+        .accordion-item {
+            background-color: var(--card-bg);
+            border-radius: var(--radius);
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 15px 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8fafc;
+            transition: background-color 0.2s ease;
+            user-select: none;
+        }
+
+        .accordion-header:hover {
+            background-color: #f1f5f9;
+        }
+
+        .accordion-header .icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-item.active .accordion-header .icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background-color: var(--card-bg);
+        }
+
+        .accordion-item.active .accordion-content {
+            padding: 20px;
+            max-height: 5000px;
+        }
+
+        .accordion-content p {
+            margin-bottom: 10px;
+        }
+
+        .accordion-content pre {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            margin: 10px 0;
+        }
+
+        .accordion-content code {
+            background-color: #e2e8f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            color: #1e293b;
+        }
+
+        .answer-box {
+            background-color: #ecfdf5;
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+
+        .answer-box h4 {
+            color: #065f46;
+            margin-bottom: 5px;
+        }
+
+        .img-placeholder {
+            width: 100%;
+            max-width: 600px;
+            background-color: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+            margin: 15px auto;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .img-placeholder img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 4px;
+        }
+
+        .img-caption {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            font-style: italic;
+            color: #475569;
+        }
+
+        /* Practice Mode Input Styles */
+        .user-answer-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            line-height: 1.5;
+            resize: vertical;
+            min-height: 80px;
+            margin: 10px 0;
+            background-color: #fffbeb;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .user-answer-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            background-color: #ffffff;
+        }
+
+        .user-answer-input::placeholder {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        .answer-btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .show-answer-btn, .clear-answer-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .show-answer-btn {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .show-answer-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .show-answer-btn.revealed {
+            background-color: var(--correct-border);
+        }
+
+        .clear-answer-btn {
+            background-color: #e5e7eb;
+            color: var(--text-main);
+        }
+
+        .clear-answer-btn:hover {
+            background-color: #d1d5db;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.8rem; }
+            .tabs { flex-direction: column; }
+            .tab-btn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Midterm Exam Study Guide</h1>
+        <p>Comprehensive Review (Questions Shuffled on Refresh)</p>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('mcq-section')">Multiple Choice</button>
+            <button class="tab-btn" onclick="switchTab('text-section')">Short Answer & Worksheets</button>
+            <button class="tab-btn" onclick="switchTab('practice-section')">Practice Mode (Type Answers)</button>
+        </div>
+
+        <!-- Multiple Choice Section -->
+        <section id="mcq-section" style="display: block;">
+            <h2 class="section-title">Multiple Choice Questions</h2>
+            <div class="instruction">
+                <strong>Interactive Study:</strong> Questions and options are shuffled every time you refresh. Click an option to check your answer. Correct answers will highlight in green, and incorrect selections will highlight in red.
+            </div>
+            <div id="mcq-container">
+                <!-- MCQs will be injected here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Text / Short Answer Section -->
+        <section id="text-section" style="display: none;">
+            <h2 class="section-title">Short Answer & Worksheet Questions</h2>
+            
+            <!-- Midterm 2: Additional Practice Questions -->
+            <h3 style="margin: 20px 0 10px; color: #1e3a8a;">Midterm 2: Additional Practice Questions</h3>
+            
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q7: miRNAs and Internal Ribosome-Binding Sites</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> MicroRNAs are small RNA molecules that bind to the 3' end of mRNAs and suppress translation. Some eukaryotic mRNAs have internal ribosome-binding sites downstream of the 5' cap. In one investigation, miRNAs did not suppress the translation of ribosomes that had attached to internal ribosome-binding sites. What does this finding suggest about how miRNAs suppress translation? (2 marks)</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>In eukaryotic cells, the ribosome usually binds at the 5' cap of the mRNA, but in a small percentage of mRNAs the ribosome binds at an internal site (at an internal ribosome entry site or IRES). The observation described above suggests that the miRNAs in this study affected translation by preventing the binding of ribosomes to the 5' cap region of the mRNA, perhaps by interfering with the ability of the ribosomes or cap-binding proteins to recognize the 5' cap. It has been demonstrated that recognition of the 5' cap involves interactions between proteins associated with the poly(A) tail and cap-binding proteins. The miRNA could interfere with this interaction.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q8: BAC Primers for Genomic Library</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> A bacterial artificial chromosome (BAC) contains a multiple cloning site (MCS) that has a single site for EcoRI (5' G^AATTC 3'). The sequence of one strand of the MCS region containing the EcoRI restriction site is shown below; the dots indicate that most of the BAC backbone sequence is not shown.</p>
+                    <p>5' ...CGGATCCCCTAAGATGAATTCCGCGCGCATCGGC...3'</p>
+                    <p>Suppose you make a genomic library by inserting EcoRI-digested fragments of a genome into EcoRI-digested BAC. Write out the sequences of two different primers you would use to sequence (in separate reactions) the two ends of any clone in the genomic library. These primers should be as long as possible based on the information given. (2 marks)</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>5'-CGGATCCCCTAAGATGAATTC-3'</p>
+                        <p>5'-GCCGATGCGCGCGGAATTC-3'</p>
+                        <p><em>NOTE: The full EcoRI restriction sites should be included to make the primers as long as possible because upon ligation of insert, which was digested with EcoRI, the insert will be flanked by the EcoRI sites.</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q9: Annotating a Genome Sequence</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> To properly annotate a genome sequence, why do you need to sequence a very large number of clones from many distinct cDNA libraries generated from different tissues?</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>To annotate a genome, you would have to sequence many clones from many cDNA libraries, because different genes are transcribed in different tissues and because some genes are transcribed only rarely in any tissue. Also, pre-mRNA transcripts are subject to alternative splicing and the alternative spliced products can vary from tissue to tissue.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q10: Linear DNA Restriction Map Fragment Sizes</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> You have been given the following restriction map of a linear 10-kilobasepair piece of DNA. E=EcoRI, H=HindIII, B=BamHI, P=PstI. The distance between each restriction site is shown below the line (in kilobasepairs, 1 kilobasepair = 10,000 bp).</p>
+                    <div class="img-placeholder">
+                        <img src="Midterm2Question10.png" alt="Restriction map">
+                    </div>
+                    <p>What sized fragments on an ethidium bromide-stained gel would you see after digesting this linear DNA fragment with each of the following restriction enzymes or combinations of enzymes: (2 marks)</p>
+                    <p>(1) EcoRI<br>(2) BamHI + HindIII</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>(1) EcoRI: 3.1 + 6.9 kb (1 mark)</p>
+                        <p>(2) BamHI + HindIII: 1.5 + 0.6 + 2.2 + 4.0 + 1.7 kb (1 mark)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q11: pBR322 Plasmid Restriction Digest</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> Shown below is the restriction enzyme map for the plasmid pBR322. The numbers refer to base pairs. The total size of the plasmid is 4363 base pairs.</p>
+                    <div class="img-placeholder">
+                        <img src="Midterm2Question11.png" alt="pBR322 plasmid map">
+                    </div>
+                    <p>a) Determine the number and sizes of the restriction fragments made by the action of: (2 marks)<br>i) EcoRI<br>ii) AccI</p>
+                    <p>b) You want to insert a DNA fragment and select for it in transformed bacteria by using resistance to tetracycline and sensitivity to ampicillin as a way of identifying the recombinant plasmid. What restriction endonucleases might be useful for this purpose? (2 marks)</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>a) i) EcoRI: One fragment of 4363 bp (1 mark).<br>ii) AccI: Two fragments of 1595 bp and 2768 bp (1 mark).</p>
+                        <p>b) You need to clone into the coding region of ampicillin to select for sensitivity (but first test for the presence of plasmid with tetracycline resistance). ScaI, PvuI, PstI, and PpaI would be useful for this purpose as they cut within the ampicillin gene and are unique sites. XmnI is not good as it cuts elsewhere in the plasmid such that the origin of replication would be eliminated. HincII is not good as it also cuts within the tetracycline gene.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q12: Directional Cloning into pBluescript II</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> You have recently identified a small protein hormone that can be used to treat certain growth defects in infants. The sequence of the cDNA that encodes for this protein is shown below with the start codon (ATG) and the stop codon (TAA) indicated:</p>
+                    <p><code>5'-AAATTATGTCGACAGAAATGGAGGTCGTTAGTGTTCTTAAGTAACAATT-3'</code></p>
+                    <p>You wish to express this protein in E. coli to isolate large quantities of this hormone. For this, you wish to use the highly versatile pBluescript II cloning vector (shown below). You have already cloned a strong promoter for gene expression between the XhoI and HindIII sites of the multiple cloning site (polylinker) in the direction as shown below.</p>
+                    <div class="img-placeholder">
+                        <img src="Midterm2Question12.png" alt="pBluescript II vector map and MCS sequence">
+                    </div>
+                    <p>Describe ALL the steps, including primer sequences and enzymes, required to directionally clone the cDNA sequence downstream of the promoter, from isolating and amplifying the cDNA sequence to selection of bacteria carrying the recombinant plasmid (step-by-step explanation, in the correct order). Many answers are possible.</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p><strong>Primers for amplification:</strong><br>
+                        Primer 1: 5'-ATGTCGACAGAAATGGAGGT-3', Tm = 58°C (manual method)<br>
+                        Primer 2: 5'-TTACTTAAGAACACTAACGACC-3', Tm = 60°C (manual method)<br>
+                        *these primers could vary, but the Tm's match well with second primer being longer than the first primer</p>
+                        <p>BUT, should add restriction enzyme sites for ease of directionally cloning. Answers could vary but EcoRI on primer 1 and BamH1 on primer 2 would work, including having coding region in correct orientation relative to the strong promoter. Also, should add 3-6 nucleotides on 5' ends to allow for efficient cleavage of the amplified product.</p>
+                        <p>Primer 1 + restriction sites / extension: 5'-CACGAATTCATGTCGACAGAAATGGAGGT-3'<br>
+                        Primer 2 + restriction sites / extension: 5'-ACAGGATCCTTACTTAAGAACACTAACGACC -3'</p>
+                        <p><strong>STEPS after designing primers:</strong></p>
+                        <ul>
+                            <li>PCR amplify open reading frame with above primers containing restriction sites</li>
+                            <li>Digest PCR product with EcoRI and BamHI</li>
+                            <li>Digest above plasmid (pBluescript II containing strong promoter) with EcoRI and BamHI</li>
+                            <li>Ligate digested PCR and plasmid using DNA ligase</li>
+                            <li>Transform bacteria using salt/heat shock transformation or electroporation</li>
+                            <li>Select transformants on media containing ampicillin</li>
+                            <li>Colony PCR to check for colonies with recombinant plasmid containing ORF insert</li>
+                            <li>Grow bacteria from positive colony and check for protein production</li>
+                        </ul>
+                        <p><em>*0.5 marks for each correct point for total of 5 marks. Correct order is important.</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pre-Midterm 1 -->
+            <h3 style="margin: 20px 0 10px; color: #1e3a8a;">Relevant questions from pre-Midterm 1</h3>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q3: Three characteristics required of genetic material</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> List three characteristics required of genetic material. For each characteristic, indicate how the structure of DNA helps us to understand the characteristic. (3 marks)</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <ol>
+                            <li>Genetic material must have the capacity to contain complex information to encode all the functions of an organism (phenotypes). Because DNA molecules in cells normally are very long and because the four base pairs can occur in any sequence, DNA molecules are able to store a large amount of information in the form of the sequence of nucleotide base pairs.</li>
+                            <li>Genetic material must have a mechanism to be copied accurately for reproduction. The double helix model of DNA of Watson and Crick suggested that DNA is replicated by semiconservative replication. In this mechanism, the two strands of a parental molecule are separated, and each parental strand acts as a template to direct the synthesis of a new strand through complementary base pairing.</li>
+                            <li>Genetic material must be able to vary in base sequence (i.e. mutable). The nucleotides can change during replication to allow variation.</li>
+                        </ol>
+                        <p><em>1 mark for each answer, fully explained.</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q4: Three major modifications of eukaryotic mRNA</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> Name the three major modifications of eukaryotic mRNA nascent transcripts before the mature mRNA is transported to the cytoplasm. In addition, describe the purpose of each modification as it relates to protein production. (3 marks)</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <ol>
+                            <li>Addition of 'cap' to 5'-end of nascent transcript -> protects RNA from degradation and required for translation of mRNA</li>
+                            <li>poly(A) tail added to 3'-end -> protective function and important for efficient translation of mRNA into protein</li>
+                            <li>RNA splicing -> coding information is fragmented into exons and so the introns removed to generate an open reading frame for the ribosome to translate</li>
+                        </ol>
+                        <p><em>For each, 0.5 marks for naming the modification and 0.5 marks for accurately describing the purpose of the modification.</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q5: Short Tandem Repeat (STR) Analysis</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> Short Tandem Repeat (STR) analysis is a common molecular genetic method used to compare polymorphic allele repeats at specific loci in genomic DNA between two or more samples. A short tandem repeat is a microsatellite with repeat units that are 2 to 7 base pairs in length, with the number of repeats varying among individuals. This makes STRs effective for human identification purposes (the basis of DNA forensics). OTG is a hypothetical polymorphic short tandem repeat (STR) locus in humans with a repeating nucleotide sequence unit of GATA. The polymorphic region is shown below as a box with 25 bp of flanking DNA sequence on each side. The n represents the number of times [GATA] on the top strand is repeated (the polymorphic part of the STR locus). (4 marks total)</p>
+                    <div class="img-placeholder">
+                        <img src="PreMidterm1Question5.png" alt="STR locus sequence">
+                    </div>
+                    <p>a) You plan to use PCR to genotype individuals for the OTG locus. If the PCR primers must be 20 nucleotides long, design a pair of primers to amplify the OTG locus? Design the primers such that they each anneal right beside the [GATA] repeats (i.e. not at the ends or middle of the DNA arms). (2 marks)</p>
+                    <p>b) What are the approximate melting temperatures of your primers? Show your calculations. (1 mark)</p>
+                    <p>c) Consider OTG alleles with 12 and 15 copies of the repeating [GATA] unit. Using the primers you have designed, what will be the sizes in base pairs of the PCR products for each allele? In other words, if you run the PCR reaction on an electrophoresis gel, what would be the exact sizes of the two bands? (1 mark)</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>a) <br>5'-GACGATTCTTGTCACCGGAG-3' [1 mark]<br>5'-CTACCAATCTCATCACCAAC-3' [1 mark]<br>
+                        <em>Be sure that they have their 5' and 3' orientations correct. If unlabelled, then by convention it is 5' left and 3' right.</em></p>
+                        <p>b) Estimate using equation: Tm = 2°C * (A + T) + 4°C * (C + G)<br>
+                        Primer 1: Tm = 2°C * (9) + 4°C * (11) = 62°C [0.5 mark]<br>
+                        Primer 2: Tm = 2°C * (11) + 4°C * (9) = 58°C [0.5 mark]<br>
+                        *Give marks if the calculated Tm's correctly even if their primer sequences were incorrect from part (a).</p>
+                        <p>c) Allele 1: 20 + (12 × 4) + 20 = 88 bp [0.5 mark]<br>
+                        Allele 2: 20 + (15 × 4) + 20 = 100 bp [0.5 mark]</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q6: Promoters vs Enhancers</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> Compare and contrast the operation of promoters and enhancers in affecting transcription of genes in eukaryotes. Include a discussion of how they operate and from what positions with respect to the transcription initiation site and the roles of each in bringing about and regulating transcription. (3 marks)</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>Both promoters and enhancers are DNA sequences that regulate transcription of adjacent DNA sequences. Both are needed for a high level of transcription of a gene. Both serve as binding sites for proteins that are involved in bringing about and regulating transcription. (1 mark)</p>
+                        <p>Promoters are found just upstream of the transcription start site and need to be in a specific orientation with respect to the transcription start site. Eukaryotic promoters typically include a core promoter located just upstream of the transcription start site, as well as a regulatory promoter located immediately upstream of the core promoter. The core promoter allows for binding of the basal transcription apparatus (including RNA polymerase). The core promoter by itself usually can only bring about a low level of transcription. The regulatory promoter allows for the binding of a variety of additional transcription factors that can interact with basal transcription factors at the core promoter to bring about regulated gene expression at a higher level. The activity of promoters is constrained in that they can only operate from a specific position and in a specific orientation with respect to the transcription start site. (1 mark)</p>
+                        <p>Enhancers are DNA sequences that can be found near or far from and upstream or downstream of the transcription initiation site. Regulatory proteins bind to enhancers and interact with the transcription apparatus at a promoter to bring about a higher level of transcription. Because of the ability of enhancers to act at various distances and positions with respect to the promoter, a large number of enhancers can be found on a single gene, allowing the gene to be responsive to a variety of different signals and conditions in the cell. (1 mark)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture 3 -->
+            <h3 style="margin: 20px 0 10px; color: #1e3a8a;">Lecture 3, Sept. 16, 2026, Worksheet</h3>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q1: 18-residue primers for central 40-nucleotide region</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> Indicate the sequences of two 18-residue primers that could be used to amplify the central 40-nucleotide region of the following 50-nucleotide DNA template by PCR (final amplicon size = 40 bp). Be sure to designate the 5' and 3' ends of the primers.</p>
+                    <p><code>5'-AGCTGGACCACTGATCATTGACTGCTAGCGTCAGTCCTAGTAGACTGACG-3'</code><br>
+                    <code>3'-TCGACCTGGTGACTAGTAACTGACGATCGCAGTCAGGATCATCTGACTGC-5'</code></p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>5'-GACCACTGATCATTGACT-3'</p>
+                        <p>5'-GTCTACTAGGACTGACGC-3'</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q2: 20-nucleotide primers and Tm calculation</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> Given the following short single-stranded DNA sequence (5'->3')</p>
+                    <p><code>5'ATGCCGTAGTCGATCATTACGATAGCATAGCACAGGGATCCACATGCACACACACGACATAGGACAGATAGCAT-3'</code></p>
+                    <p>What oligonucleotide primers (make each 20 nucleotides in length) would be required for PCR amplification of this entire fragment of DNA? Be sure to designate the 5' and 3' ends of the primers. What would be the Tm of these primers using the estimated (manual) calculation method? Search online for an 'oligo tm calculator' and then use that to re-calculate the Tm's of these primers.</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>Primer 1: 5'-ATGCCGTAGTCGATCATTAC-3'</p>
+                        <p>Primer 2: 5'-ATGCTATCTGTCCTATGTCG-3'</p>
+                        <p>You can estimate the Tm using the formula of 2°C for each A and T and 4°C for each G and C:</p>
+                        <p>Tm = 2°C * (A + T) + 4°C * (C + G)</p>
+                        <p>Primer 1: Tm = 2°C * (11) + 4°C * (9) = 58°C<br>Primer 2: Tm = 2°C * (11) + 4°C * (9) = 58°C</p>
+                        <p>A more sophisticated formula, taking into account exact sequence and base-stacking parameters, will give a more accurate prediction of Tms. If picking 'Taq DNA Polymerase with Standard Taq Buffer' with 200nM primer concentration, the calculated Tms are: Primer 1: Tm = 53°C, Primer 2: Tm = 52°C. Annealing temperature would then be about 47°C. The annealing temperature for the PCR should be set 3-6°C lower than the estimated Tm to allow maximum binding of primers, but not too low so as to prevent mis-annealing to target sites that are not perfectly complementary.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture 5 -->
+            <h3 style="margin: 20px 0 10px; color: #1e3a8a;">Lecture 5, Sept. 23, 2026, Worksheet</h3>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q1: Oligo(dT) cellulose purification rationale</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> Mature mRNA from eukaryotic cells is often purified from other components in the cell (e.g. rRNAs) with the use of columns containing oligo (dT) cellulose. These columns contain short segments of single-stranded deoxyribose thymidylate residues, oligo (dT), attached to a cellulose matrix. Explain the rationale for use of these columns to purify mature mRNA from a mixture of components.</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>During maturation, eukaryotic mRNA precursors are modified at their 3' ends by the addition of a poly(A) tail. When a mixture of components from a cell extract is passed over the column, the poly(A) tail will hybridize with oligo(dT) on the column. The other components in the cell extract will pass through the column.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q2: Polypeptide sequence from DNA</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> A biotechnology company has recently discovered a 10-amino acid polypeptide that can modulate neurotransmission in humans. The sequence of one of the DNA strands of this small gene is shown below. Note: this gene contains no introns.</p>
+                    <p><code>5'-ACATTCGATTACGAAGTGAACCCAGTCTTCTCACAAATCATGGTAACCGCTC-3'</code></p>
+                    <p>(a) What is the sequence of the open reading frame (start to stop codons, inclusively) in the mRNA transcript?<br>(b) What is the predicted amino sequence of the polypeptide?</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>(a) 5'-AUG AUU UGU GAG AAG ACU GGG UUC ACU UCG UAA-3'</p>
+                        <p>(b) N-Met-Ile-Cys-Glu-Lys-Thr-Gly-Phe-Thr-Ser-C (or MICEKTGFTS)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture 9 -->
+            <h3 style="margin: 20px 0 10px; color: #1e3a8a;">Lecture 9, Oct. 7 2026, Worksheet</h3>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q1: Three features of miRNAs as regulators</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> List and briefly discuss three features that make miRNAs especially useful regulators of gene expression.</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>First, a single miRNA can regulate a whole set of different mRNAs, so long as the mRNAs carry a common sequence (e.g. in their 3-UTRs). Second, regulation by miRNAs can be combinatorial (multiple distinct miRNAs targeting the same mRNA), allowing incremental changes in translation of a target mRNA, which will fine-tune gene expression. Third, a miRNA occupies very little space in the genome compared with a protein-coding gene (e.g. transcription factor). Fourth, they exert their influence rapidly by affecting mRNA stability or mRNA translation, which is important for rapid responses (transcriptional regulation via enhancers/activators/repressors takes longer).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q2: Construct transgenes for siRNAs</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> As an alternative to random mutagenesis, scientists can screen for mutant phenotypes in a high-throughput manner by systematically knocking down individual gene functions using RNA interference (RNAi). Suggest three distinct ways to construct transgenes that would result in siRNAs to knock down a gene (e.g. in fruit flies, C. elegans, human cell lines, or plants).</p>
+                    <div class="img-placeholder">
+                        <img src="Lecture9WorksheetQuestion2.png" alt="">
+                        <div class="img-caption">Three diagrams showing transgene constructs for generating dsRNA</div>
+                    </div>
+                    <p>Another method, usually applied to plants, would be to insert the gene segment of interest into the genome of a RNA virus. Transfer of the transgenic RNA virus either directly to the plant leaves or indirectly would result in gene silencing. An example using Potato Virus X is shown below.</p>
+                    <div class="img-placeholder">
+                        <img src="Lecture9WorksheetQuestion2.1.png" alt="">
+                        <div class="img-caption">Potato Virus X construct with host cDNA</div>
+                    </div>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>The diagrams show three different ways to generate double-stranded RNA corresponding to a gene that should knock out or knock down the gene's expression by RNAi. In the diagrams, the purple rectangles corresponds to a regulatory region (enhancer and promoter) and the blue rectangles are all or part of a gene's cDNA. The arrows represent the direction RNA polymerase would travel in transcribing the gene X sequences starting at each promoter. All would generate double strand RNA, which would trigger the production siRNAs targeting the gene segment used in the construct.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture 10 -->
+            <h3 style="margin: 20px 0 10px; color: #1e3a8a;">Lecture 10, Oct. 14 2026, Worksheet</h3>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q1: miRBase Exploration (ath-MIR398b)</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> On your computer, explore miRBase (www.mirbase.org)</p>
+                    <p>a) Search for the plant miRNA family called miR398. You should see many hits from various plant species. Of these hits, what is the hairpin (stem-loop) sequence of ath-MIR398b (accession MI0001018) from the model plant Arabidopsis thaliana? Paste the linear (unfolded) sequence below.<br>
+                    b) What do the capitalized sequences in blue represent?<br>
+                    c) What is the sequence of the mature ath-MIR398b that has been experimentally determined?<br>
+                    d) What do the predicted target mRNAs of ath-MIR398b encode? (protein names)</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>a) <code>uggaucucgacAGGGUUGAUGAUAGAACACACgaguaucaacggcuguaaugacgcuacgucauuguuacagcucucguuuucaUGUGUUCUCAGGUCACCCCUGcugagcucuu</code> (written 5' to 3')</p>
+                        <p>b) They represent part of the stem of the pre-miRNA. They base pair with each other due to their almost perfect complementary. One of these sequences will become the single-stranded mature ath-MIR398b complexed in RISC.</p>
+                        <p>c) 5'- UGUGUUCUCAGGUCACCCCUG-3'</p>
+                        <p>d) The miR398 of miRNAs are predicted to target mRNAs coding for copper superoxide dismutases and cytochrome C oxidase subunit V. (see comments section of the webpage)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q2: miRNAs in agricultural biotechnology</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> How could miRNAs be used in agricultural biotechnology? Propose a specific crop trait to alter using a real or hypothetical miRNA and be as specific as possible. What are potential risks of using miRNAs for this type of agricultural application?</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p><strong>Some possible crop traits to target (other answers possible):</strong></p>
+                        <ul>
+                            <li><strong>Improving stress tolerance:</strong> Overexpressing or editing stress-responsive miRNAs (e.g. miR398 for oxidative stress, miR169 for drought) could make crops more resistant to drought, salinity, or heat.</li>
+                            <li><strong>Enhancing yield and development:</strong> Manipulating miRNAs like miR156 (controls flowering time and branching) could optimize plant architecture and yield.</li>
+                            <li><strong>Nutrient efficiency:</strong> miRNAs regulating phosphate or copper homeostasis (miR399, miR398) could be engineered to grow crops on poor soils.</li>
+                            <li><strong>Disease and pest resistance:</strong> Artificial miRNAs (amiRNAs) can be designed to silence pathogen or pest genes, giving plants targeted resistance.</li>
+                        </ul>
+                        <p><strong>Some potential risks include (other answers possible):</strong></p>
+                        <ul>
+                            <li><strong>Off-target effects:</strong> Engineered miRNAs might silence unintended plant genes, causing developmental problems. Bioinformatics should reduce this possibility.</li>
+                            <li><strong>Ecological impact:</strong> Altered miRNA regulation could affect plant-microbe interactions, pollinators, or soil ecosystems.</li>
+                            <li><strong>Regulatory & ethical concerns:</strong> As with any genetic modification, public acceptance and biosafety regulations are important considerations.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture 11 -->
+            <h3 style="margin: 20px 0 10px; color: #1e3a8a;">Lecture 11, Oct. 19 2026, Worksheet</h3>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q1: Plasmid cloning components</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> Explain how each of the following is used in cloning using a plasmid (recombinant DNA constructs):<br>
+                    a) antibiotic resistance genes<br>
+                    b) origin of replication<br>
+                    c) multiple cloning site</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>a) <strong>Antibiotic resistance genes:</strong> Antibiotic resistance genes are used to detect cells that contain recombinant DNA (transformed cells). Cell mixtures (ones that have taken up plasmid and ones that have not) are plated on media containing antibiotics (e.g. ampicillin). The cells that grow in the presence of antibiotic contain the plasmid.</p>
+                        <p>b) <strong>Origin of replication:</strong> An origin of replication is a segment of DNA that allows initiation of replication of the plasmid so that the plasmid DNA is efficiently replicated and thus amplified in the host cells. The origin needs to be specific for the host cells. Plasmids are typically present in multiple copies per cell (10s to 100s of copies per cell depending on the plasmid / origin of replication).</p>
+                        <p>c) <strong>Multiple cloning site:</strong> A multiple cloning site is a series of unique restriction sites situated side-by-side in a plasmid that allows convenient insertion of foreign segments of DNA digested with the same restriction sites. This often allows for directional cloning using two different restriction sites that have distinct cohesive ends.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q2: Compatible cohesive ends</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> The following shows the cleavage sites of several restriction endonucleases. You cut a plasmid vector using the BamHI restriction nuclease. Which of the five restriction endonucleases shown on the second row can generate an insert fragment that can be directly ligated into this BamHI-digested plasmid with the addition of only DNA ligase and ATP? In other words, which of the five restriction enzymes produces compatible cohesive ends with BamHI? Explain.</p>
+                    <div class="img-placeholder">
+                        <img src="Lecture11WorksheetQuestion2.png" alt="Restriction enzyme cleavage sites">
+                    </div>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p><strong>BglII.</strong> The 5'-overhangs produced by BamHI and BglII are the same. It is important to realize that these two enzymes cut asymmetrically in the same orientation, both producing 5' overhangs that can then base-pair with each other. KpnI does not work because it produces 3' overhangs, despite the central 4 nucleotides being the same as BamHI and BglII. Also, note that the sequence generated after ligation of the vector and insert (5'-GGATCT-3' on each side of the insert) can then no longer be cut by either BamHI or BglII. This new 6-base pair nucleotide sequence is neither a BamHI or a BglII recognition site.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture 12 -->
+            <h3 style="margin: 20px 0 10px; color: #1e3a8a;">Lecture 12, Oct. 21 2026, Worksheet</h3>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q1: Primers, Tm, and Directional Cloning for Polypeptide</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> A biotechnology company has recently discovered a 13-amino acid polypeptide that stimulates milk production in cows. A sequence of DNA containing the open reading frame of the peptide is shown below with the start (ATG) and stop (TAA) codons underlined (RNA-like strand). There are no introns.</p>
+                    <p><code>5'-GTACGATGGGTACTTGTGAGAAGAGCACTGGGTTCACTGCGTGTTAATCGAA-3'</code></p>
+                    <p>(a) Indicate the sequences of the two 20-nucleotide primers that would be used to amplify by PCR the 42-base pair region containing the open reading frame (start to stop codons, inclusively). Be sure to designate the 5' and 3' ends of the primers.<br>
+                    (b) Calculate the Tm of each of your primers using the manual method shown in class.<br>
+                    (c) What would be the sequences of the primers if you wanted to use HindIII (A↓AGCTT) and EcoRI (G↓AATTC) to directionally sub-clone the amplified product into a plasmid digested with the corresponding enzymes, such that the HindIII site is next to the promoter and the EcoRI site is next to the transcription terminator?<br>
+                    (d) Provide the sequence of the amplified DNA segment after it has been digested with HindIII and EcoRI. Note that the arrows in the restriction sites denoted above indicate the sites of cleavage. Provide both the top and bottom complimentary strands (duplexed together) and designate the 5' and 3' ends.</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>(a) Primer 1: 5'-ATGGGTACTTGTGAGAAGAG-3'<br>Primer 2: 5'-TTAACACGCAGTGAACCCAG-3'</p>
+                        <p>(b) Primer 1: 58 °C<br>Primer 2: 60 °C</p>
+                        <p>(c) 5'-GTCAAGCTTATGGGTACTTGTGAGAAGAG-3'<br>5'-CACGAATTCTTAACACGCAGTGAACCCAG-3'<br>
+                        <em>*restriction enzymes generally do not cut well at the very ends of DNA. Therefore, you should add 3-6 nucleotides at the very 5' ends of each primer in addition to the restriction site (as shown in answer above). This short sequence can pretty much be random (i.e. doesn't have to be 5'-GTC-3' or 5'-CAC-3' in primer 1 and 2, respectively), but you need to maintain reasonably good overall primer design (e.g. 40-60% GC content).</em></p>
+                        <p>(d) 5'-AGCTTATGGGTACTTGTGAGAAGAGCACTGGGTTCACTGCGTGTTAAG-3'<br>
+                        3'- ATACCCATGAACACTCTTCTCGTGACCCAAGTGACGCACAATTCTTAA-5'</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture 13 -->
+            <h3 style="margin: 20px 0 10px; color: #1e3a8a;">Lecture 13, Nov. 2 2026, Worksheet</h3>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q1: Sanger Sequencing Autoradiograph</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> You have performed dideoxy (Sanger) DNA sequencing to determine the sequence of an insert that you have recently 'cloned' into a plasmid. Below is an autoradiograph of part of the sequencing gel with the dideoxynucleotides for each of the four reactions indicated across the top of each lane. Based on this gel, write the DNA sequence of the template strand and indicate the 5' and 3' ends.</p>
+                    <div class="img-placeholder">
+                        <img src="Lecture13WorksheetQuestion1.png" alt="Autoradiograph of Sanger sequencing gel">
+                        <div class="img-caption">Sanger sequencing gel (Lecture 13)</div>
+                    </div>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>5'-ATTATCGTTCACAGAATTGATTTCCCTCTCGATCATATGAGTT-3'</p>
+                    </div>
+                </div>
+            </div>
+            
+             <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q1 (Alternative Image): Sanger Sequencing Tube</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="img-placeholder">
+                        <img src="Quiz5Question5.png" alt="Sanger sequencing gel tube">
+                        <div class="img-caption">Sanger sequencing gel tube (Quiz 5)</div>
+                    </div>
+                    <p>(This is the image from Quiz 5 Question 5, which relates to reading Sanger sequencing gels)</p>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q2: Mechanical shearing vs Restriction digestion</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> To make a genomic library useful for sequencing an entire genome, why would you ordinarily fragment the genomic DNA by mechanical shearing forces like sonication or partial restriction enzyme digestion rather than by cutting the DNA to completion with a restriction enzyme?</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>Mechanical shearing will fragment DNA at random locations, ensuring that overlap will be obtained if enough fragments are analyzed. Because the genomic DNA sample is obtained from many cells, the fragments from different cells will not have the same beginning and end points; thus, they will overlap.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture 14 -->
+            <h3 style="margin: 20px 0 10px; color: #1e3a8a;">Lecture 14, Nov. 4 2026, Worksheet</h3>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q1: Orthologous vs Paralogous genes</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> What is the difference between orthologous and paralogous genes?</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>Orthologs are homologs in different organisms. They arose from the same gene in a common ancestor (via descent). Usually have the same function in two different species. Paralogs are homologs in the same organism (arise by gene duplication). Usually end up having different functions in the same species.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q2: Illumina vs Sanger fluorescent labels</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> How do fluorescently labeled nucleotides from Illumina sequencing differ from fluorescently labeled ddNTPs from Sanger sequencing?</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>The labeled nucleotides of Illumina sequencing do not terminate the sequencing reaction. This is similar to termination caused by dideoxyribonucleotides in Sanger sequencing. In this case, however, the terminator is reversible—it can be chemically removed.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q3: Diploid genomes and sequencing reads</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> The two genome copies in all of an individual human's somatic cells are not identical (one maternal-derived set of chromosomes and one paternal-derived set of chromosomes; humans are a diploid organism). How do you think that this affects the data you obtained from a single sequence read? From a computer readout of a contig?</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>A single sequence read will contain the base-pair sequence of one of the two genomes (coming from an individual clone in a library). However, in various locations within a contig, two different sequences will exist – one obtained from the maternal genome, and the other from the paternal genome.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lecture 15 -->
+            <h3 style="margin: 20px 0 10px; color: #1e3a8a;">Lecture 15, Nov. 9 2026, Worksheet</h3>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q1: Gene duplication, divergence, and loss in pathogens</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> Gene duplication, divergence and loss are important processes associated with accessory genomic regions in some plant pathogens. Consider how each process could contribute to fungal adaptation in the 'arms race' against plant defenses. Note: plants evolve to detect fungal effectors, and fungi evolve to modify their effector profiles. When a plant can detect a fungal effector, it can mount a more timely or efficient immune response.</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>Duplication of a gene to give two copies of the genes gives the opportunity for these two genes to diverge (mutations that affect the encoded protein sequence and therefore structure of that protein). Although the plant may have evolved to detect the fungal effector to mount an effective (rapid) immune response, the second diverged gene with an altered amino sequence may not be recognized by the immune receptor in the plant. Loss of the gene encoding the original fungal effector would mean that the plant won't effectively recognize that it is being attached by a fungal pathogen. The fungi may also have other effectors to get around other aspects of the plant immune system. The gain, loss and mutation of genes encoding fungal effectors and genes encoding plant resistance proteins results in an evolutionary arms race. Genomic analyses of both the fungus and the plant genomes gives information on how this arms race is playing out over evolutionary time.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <div class="accordion-header" onclick="toggleAccordion(this)">
+                    <span>Q2: Next steps for novel metabolite gene identification</span>
+                    <span class="icon">▼</span>
+                </div>
+                <div class="accordion-content">
+                    <p><strong>Question:</strong> During a routine screening of grains imported into Canada, the Grain commission noted an appearance of a novel metabolite profile and chemical analyses suggested it is a modification of a known fungal secondary metabolite. What are the next steps to identify the gene(s) involved in the biosynthesis of the novel metabolite?</p>
+                    <div class="answer-box">
+                        <h4>Answer:</h4>
+                        <p>Additional bioinformatics could be done, specifically comparative genomics to correlate production of the novel metabolite with genotypes - allelic variation. This doesn't definitively identify the genes, it is correlative, but it gives gene candidates that may be involved in the biosynthesis of the novel metabolite. Experimental work is required to truly identify the genes involved. This could start with transcriptomics to correlate gene expression with the production of the metabolite, followed by knocking out gene function (e.g. via CRISPR-Cas gene editing) and transgenics (e.g. overexpress the candidate genes). Eliminating gene function should result in no production of the novel metabolite under any conditions and increasing gene expression should result in increased production of the novel metabolite (so long as there is no feedback regulation).</p>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Practice Mode Section (Populated dynamically) -->
+        <section id="practice-section" style="display: none;">
+            <h2 class="section-title">Practice Mode: Type Your Answers</h2>
+            <div class="instruction">
+                <strong>Practice Mode:</strong> Read each question and type your answer in the box. Click <strong>Show Correct Answer</strong> to reveal and compare with the expected answer. Use <strong>Clear</strong> to reset the box. This is a great way to test yourself before the exam!
+            </div>
+            <div id="practice-container">
+                <!-- Dynamically populated from text-section content -->
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // --- MCQ Data ---
+        const mcqs = [
+            // From PDF
+            {
+                question: "1) The enzyme that seals nicks in dsDNA where a 3'-OH and 5'-phosphate are juxtapositioned is:",
+                options: ["DNA polymerase I", "DNase I", "exonuclease", "Taq polymerase", "DNA ligase"],
+                correct: "DNA ligase"
+            },
+            {
+                question: "2) You are interested in a particular segment of rhinoceros DNA and would like to clone it into a plasmid. You have the following restriction map of the region that includes the DNA of interest and the plasmid (E = EcoRI, H = HindIII, X = XbaI, S = SphI, N = NotI). Which restriction enzymes would you choose to clone the DNA of interest into the cloning vector?",
+                options: ["E and H", "X and N", "S", "S and N"],
+                correct: "X and N",
+                image: "Midterm2Question2.png"
+            },
+            {
+                question: "3) A scientist created transgenic Caenorhabditis elegans worms that expressed a gene that made the worms glow green under fluorescent light. They then injected double-stranded RNA complementary to this gene. Which of the following results was MOST likely to be observed?",
+                options: ["The worms glowed green under fluorescent light.", "The worms were not able to glow green under fluorescent light.", "The injection of double-stranded RNA was lethal and the worms died.", "The worms had an increased life span.", "The CpG islands near the promoter of the gene became demethylated."],
+                correct: "The worms were not able to glow green under fluorescent light."
+            },
+            {
+                question: "4) A method used to insert or transform E. coli cells with a plasmid is to:",
+                options: ["add the DNA to bacteria that have been treated with lysozyme to produce 'holes' in the cell wall", "add the DNA to a heated suspension of cells at 42 °C", "incubate the DNA with the cells overnight at 4 °C", "mix plasmids with an extract of broken cells", "treat the bacteria with CaCl2, add the DNA, and briefly heat to 42 °C."],
+                correct: "treat the bacteria with CaCl2, add the DNA, and briefly heat to 42 °C."
+            },
+            {
+                question: "5) What is the function of dideoxynucleotides in Sanger DNA sequencing?",
+                options: ["They act as primers for DNA polymerase.", "They act as primers for reverse transcriptase.", "They cut the sequenced DNA at specific sites.", "They allow only the specific sequencing of the RNAs of a genome.", "They stop synthesis at a specific site, so the base at that site can be determined."],
+                correct: "They stop synthesis at a specific site, so the base at that site can be determined."
+            },
+            {
+                question: "6) Fragile X syndrome is caused by expansion of a trinucleotide repeat in the 5' -UTR of the FMR-1 gene. This would be an example of a Simple Sequence Repeat (SSR), also known as a Short Tandem Repeat (STR) or microsatellite. What is the simplest way to detect this expansion?",
+                options: ["PCR using genomic DNA as template and forward and reverse primers that are complementary to the repeats, followed by gel electrophoresis.", "PCR using genomic DNA as template and two primers, one complementary to the repeat region and the other complementary to unique sequence, followed by gel electrophoresis.", "Whole-genome sequencing.", "PCR using two primers that are complementary to unique sequences on either side of the repeat region, followed by gel electrophoresis.", "Direct exome sequencing using a microarray."],
+                correct: "PCR using two primers that are complementary to unique sequences on either side of the repeat region, followed by gel electrophoresis."
+            },
+            // From Pre-Midterm 1 PDF
+            {
+                question: "1) All DNA polymerases synthesize new DNA by adding nucleotides to the ____ of the growing DNA chain.",
+                options: ["3'-OH", "5'-OH", "3'-phosphate", "5'-phosphate", "nitrogenous base"],
+                correct: "3'-OH"
+            },
+            {
+                question: "2) What is the RNA sequence transcribed from the DNA shown below?",
+                options: ["5'-CCGTATAATGA-3'", "3'-GGCATATTACT-5'", "5'-GGCAUAUUACA-3'", "5'-CCGUAUAAUGA-3'", "3'-GGCAUAUUACU-5'"],
+                correct: "5'-CCGUAUAAUGA-3'",
+                image: "pre-Midterm1Question2.png"
+            },
+            // From Quiz Image 1
+            {
+                question: "You want to amplify the DNA of the sequence shown in the figure below. Of the listed primers, choose the pair that will allow you to amplify the DNA by polymerase chain reaction (PCR).",
+                options: ["2 and 7", "1 and 8", "4 and 5", "3 and 6"],
+                correct: "1 and 8",
+                image: "Quiz1Question1.png"
+            },
+            {
+                question: "The following represents a typical polymerase chain reaction (PCR) cycle. Which parts of the conventional PCR cycle are represented by the letters A, B, and C?",
+                options: ["A: denaturation; B: primer annealing; C: extension/polymerization", "A: primer annealing; B: extension/polymerization; C: denaturation", "A: denaturation; B: extension/polymerization; C: primer annealing", "A: extension/polymerization; B: denaturation; C: primer annealing", "A: extension/polymerization; B: primer annealing; C: extension/polymerization"],
+                correct: "A: primer annealing; B: extension/polymerization; C: denaturation",
+                image: "Question1Question2.png"
+            },
+            {
+                question: "A researcher designs the following DNA primer: 5'-TACGATGACCTGATCGTACGG-3'. What is the approximate melting temperature (Tm) of this primer using the manual (Wallace) method?",
+                options: ["56°C", "64°C", "66°C", "60°C", "62°C"],
+                correct: "64°C"
+            },
+            // From Quiz Image 2
+            {
+                question: "The following schematic graph shows the result of a real-time quantitative PCR (qPCR) experiment. DNA from two water samples (1 and 2) were isolated and subjected to qPCR using primers designed to specifically amplify DNA from a gene unique to an aquatic microorganism that you want to detect and quantify in the environment. Added to the reaction was SYBR green fluorescent dye. According to the graph, which sample has a higher level of DNA (and therefore organism in that aquatic environment) and by about how much?",
+                options: ["About 2-fold higher in sample 1", "About 1000-fold higher in sample 1", "About 2-fold higher in sample 2", "About 1000-fold higher in sample 2"],
+                correct: "About 1000-fold higher in sample 1",
+                image: "Quiz1Question4.png"
+            },
+            {
+                question: "Assume you conduct a qPCR experiment using A) 1.8 ng, B) 0.7 ng and C) 0.2 ng of the same template DNA. Do you expect the threshold cycle (Ct) to increase, decrease or stay the same when going from A to B to C?",
+                options: ["decrease", "increase", "stay the same"],
+                correct: "increase"
+            },
+            {
+                question: "Which of the following best describes the three essential properties that DNA must possess to function as genetic material?",
+                options: ["DNA must be capable of producing energy, replicate only in reproductive cells, and remain identical in all individuals of a species.", "DNA must remain completely unchanged during replication, produce proteins directly without any intermediate molecules, and undergo occasional changes that generate genetic variation.", "DNA must be able to replicate accurately, contain information that can be expressed to produce an organism's phenotype, and undergo occasional changes that generate genetic variation.", "DNA must be translated into protein, prevent mutations from occurring, and be transmitted only from parent to offspring through the cytoplasm."],
+                correct: "DNA must be able to replicate accurately, contain information that can be expressed to produce an organism's phenotype, and undergo occasional changes that generate genetic variation."
+            },
+            {
+                question: "All DNA polymerases synthesize new DNA by adding nucleotides to the ____ of the growing DNA chain.",
+                options: ["3'-phosphate", "5'-phosphate", "3'-OH", "nitrogenous base", "5'-OH"],
+                correct: "3'-OH"
+            },
+            // From Quiz Image 3
+            {
+                question: "You wish to amplify a portion of the human CFTR gene by PCR. Below is the relevant region you wish to amplify (// signifies exon sequence 100 bp in length that is not shown). Each of the shown segments of DNA is 25 bp in length. Which of the primer pairs would allow you to amplify the above region of the CFTR gene?",
+                options: [
+                    "3' TACGAAACCCACCCTTCTTC 5' and 5' TCGTAATTATCCACAGGTT 3'",
+                    "5' ATGCTTTGGTGGGAAGAAG 3' and 5' TTGGACACCTATTAATGCT 3'",
+                    "5' ATGCTTTGGTGGGAAGAAG 3' and 5' AACCTGTGGATAATTACGA 3'",
+                    "5' ATGCTTTGGTCCCAAGAAG 3' and 5' TCGTAATTATCCACAGGTT 3'"
+                ],
+                correct: "5' ATGCTTTGGTGGGAAGAAG 3' and 5' AACCTGTGGATAATTACGA 3'",
+                image: "Quiz1Question8.png"
+            },
+            // From Quiz Image 4
+            {
+                question: "When regions around genes become sensitive to the enzyme DNase I, this is an indication that those regions are:",
+                options: ["becoming transcriptionally active.", "becoming highly methylated at cytosine residues.", "becoming more condensed.", "forming heterochromatin."],
+                correct: "becoming transcriptionally active."
+            },
+            {
+                question: "Methylated histone tail amino acids are associated with chromatin that is",
+                options: ["open only.", "either open or closed.", "newly replicated.", "closed only.", "about to replicate."],
+                correct: "either open or closed."
+            },
+            {
+                question: "A researcher wants to determine whether a transcription factor binds to a specific DNA sequence suspected to be a regulatory element. They perform an electrophoretic mobility shift assay (EMSA) using a labeled DNA probe. Which result would provide the strongest evidence that the transcription factor specifically binds to the DNA probe?",
+                options: ["The labeled DNA probe forms a slower-migrating band when the transcription factor is added, and the band disappears when excess unlabeled identical DNA is included.", "The labeled DNA probe migrates faster when the transcription factor is added.", "The labeled DNA probe forms a faster-migrating band when excess unlabeled DNA is added.", "The transcription factor produces a band at the same position as the free DNA probe, regardless of whether DNA is present."],
+                correct: "The labeled DNA probe forms a slower-migrating band when the transcription factor is added, and the band disappears when excess unlabeled identical DNA is included."
+            },
+            {
+                question: "The 5' and 3' untranslated regions (UTRs) of processed mRNA molecules are derived from:",
+                options: ["promoters", "terminators", "the protein-coding region", "exons", "introns"],
+                correct: "exons"
+            },
+            {
+                question: "In the processing of eukaryotic transcripts into mRNA, ______ cap and ______ tail are usually added to the transcript",
+                options: ["a methylated guanine; a poly-A", "an acetylated guanine; a poly-C", "a poly-G; a methyl group", "a poly-T; an acetyl group", "a methylated adenine; a poly-G"],
+                correct: "a methylated guanine; a poly-A"
+            },
+            // From Quiz Image 5
+            {
+                question: "Chicken ovalbumin mRNA was used in a hybridization experiment with denatured chicken genomic DNA. Electron microscopy revealed a number of loops, as sketched below. Based on this picture, which of the following is TRUE:",
+                options: ["the loop at \"c\" represents a large exon", "pointer \"a\" identifies DNA", "the loop at letter \"b\" represents an intron", "the solid line represents mRNA"],
+                correct: "the loop at letter \"b\" represents an intron",
+                image: "Quiz2Question6.png"
+            },
+            {
+                question: "You have a segment of DNA that contains the following sequence (top and bottom strands shown). If you know that the RNA transcribed from this segment contains the following sequence (matching the top strand except U for T), Which of the following choices best describes how transcription occurs?",
+                options: ["The top strand is the template strand; RNA polymerase moves along this strand from 5' to 3'.", "The top strand is the template strand; RNA polymerase moves along this strand from 3' to 5'.", "The bottom strand is the template strand; RNA polymerase moves along this strand from 5' to 3'.", "The bottom strand is the template strand; RNA polymerase moves along this strand from 3' to 5'."],
+                correct: "The bottom strand is the template strand; RNA polymerase moves along this strand from 3' to 5'.",
+                image: "Quiz2Question7.1.png"
+            },
+            {
+                question: "In eukaryotes, but NOT in prokaryotes, ribosomes usually find the start site of translation by ___________.",
+                options: ["binding to the promoter of the gene", "scanning along the mRNA from the 5' end cap", "binding to the Shine-Dalgarno sequence preceding the initiation AUG codon", "binding an initiator tRNA"],
+                correct: "scanning along the mRNA from the 5' end cap"
+            },
+            // From Quiz Image 6
+            {
+                question: "How do RNA hairpin structures contribute to the production of functional microRNAs (miRNAs) in eukaryotic cells?",
+                options: ["Hairpins prevent miRNAs from binding to Argonaute proteins, thereby increasing target gene expression.", "Hairpins in primary miRNA transcripts are processed by Drosha and Dicer to generate mature miRNAs that become part of the miRNA-induced silencing complex (RISC).", "Hairpins serve as primers for DNA polymerase, allowing miRNAs to be copied into DNA.", "Hairpins recruit ribosomes to primary miRNA transcripts, allowing them to be translated into regulatory proteins."],
+                correct: "Hairpins in primary miRNA transcripts are processed by Drosha and Dicer to generate mature miRNAs that become part of the miRNA-induced silencing complex (RISC)."
+            },
+            {
+                question: "How does 4E-BP1 regulate translation initiation through the 5' cap of eukaryotic mRNAs?",
+                options: ["When nutrients are scarce, 4E-BP1 binds to eIF4E, preventing eIF4E from participating in the initiation complex required for cap-dependent translation.", "4E-BP1 reduces the length of the mRNA poly-A tail, thereby preventing interaction of poly-A binding proteins (PABPs) from interacting with the 5' cap.", "4E-BP1 removes the 5' cap from mRNAs, targeting them for degradation.", "When nutrients are scarce, 4E-BP1 is phosphorylated, increasing its binding to eIF4E and inhibiting translation.", "4E-BP1 binds directly to the 5' cap and recruits the ribosome to initiate translation."],
+                correct: "When nutrients are scarce, 4E-BP1 binds to eIF4E, preventing eIF4E from participating in the initiation complex required for cap-dependent translation."
+            },
+            {
+                question: "microRNAs (miRNAs) usually bind to which part of the mRNA molecules that they control?",
+                options: ["Coding region", "3'-poly A tail", "5'-UTR", "Stop codon", "3'-UTR"],
+                correct: "3'-UTR"
+            },
+            {
+                question: "Which statement best describes the main distinction between the origin of the two classes of small regulatory RNAs: siRNA and miRNA?",
+                options: ["siRNAs originate within the cell cytoplasm; miRNAs originate from the cell genome", "miRNAs are expressed whenever siRNAs are unable to appropriately degrade RNA sequences", "miRNAs are processed from dsRNA viruses; siRNAs are processed from ssRNA viruses", "siRNAs originate from predominantly exogenous dsRNA; miRNAs originate from the cell genome"],
+                correct: "siRNAs originate from predominantly exogenous dsRNA; miRNAs originate from the cell genome"
+            },
+            {
+                question: "What is the primary function of Argonaute proteins in RNA interference (RNAi)?",
+                options: ["They excise stem-loop structures from primary miRNA (pri-miRNA) to generate pre-miRNA.", "They synthesize small interfering RNAs (siRNAs) from long double-stranded RNA precursors.", "They unwind DNA during replication to expose the template strands.", "They catalyze the addition of a poly(A) tail to eukaryotic mRNAs.", "They bind small RNAs, such as siRNAs or miRNAs, and use them to guide the silencing of complementary target RNAs."],
+                correct: "They bind small RNAs, such as siRNAs or miRNAs, and use them to guide the silencing of complementary target RNAs."
+            },
+            // From Quiz Image 7
+            {
+                question: "Why are many RNA viruses susceptible to RNA interference (RNAi) in plants and other eukaryotes?",
+                options: ["Viral RNA can form double-stranded RNA intermediates during replication, which can be processed into small interfering RNAs (siRNAs)", "Viral RNA is inherently unstable and is rapidly degraded by Dicer independently of small RNA production.", "RNA viruses integrate their genomes into the host chromosome, allowing Argonaute proteins to recognize and remove viral DNA.", "RNA viruses lack ribosomes and must rely on the host cell's RNAi machinery to synthesize viral proteins."],
+                correct: "Viral RNA can form double-stranded RNA intermediates during replication, which can be processed into small interfering RNAs (siRNAs)"
+            },
+            {
+                question: "How might RNA interference (RNAi) be used to treat diseases in humans?",
+                options: ["RNAi probes could bind to good genes and thus increase their expression.", "RNAi could be used to amplify large amounts of therapeutic proteins.", "siRNAs could be generated that would silence elevated levels of a harmful gene.", "RNAi cannot be used in humans, as it is a process found only in plants.", "An RNAi library could be generated to measure harmful gene expression levels."],
+                correct: "siRNAs could be generated that would silence elevated levels of a harmful gene."
+            },
+            {
+                question: "siRNAs and miRNAs are produced by the:",
+                options: ["cutting and processing of double-stranded RNA by Dicer enzymes.", "cleavage of RISCs by endonucleases.", "cleavage of functional mRNA within the cytoplasm.", "cutting and processing of RNA stem-loop structures by Dicer enzymes.", "cleavage of pre-mRNA in the nucleus."],
+                correct: "cutting and processing of double-stranded RNA by Dicer enzymes."
+            },
+            // From Quiz Image 8
+            {
+                question: "Why is it necessary to have a selectable marker on a plasmid vector when transforming a host cell such as E. coli?",
+                options: ["Transformation is so efficient that without a selectable marker, each E. coli cell would take up several plasmids.", "The selectable marker is necessary to circularize the plasmid, and without that, no transformation occurs.", "Transformation is inefficient and the majority of E. coli cells will not have taken up the plasmid.", "Only plasmids containing a selectable marker can be taken up by an E. coli cell."],
+                correct: "Transformation is inefficient and the majority of E. coli cells will not have taken up the plasmid."
+            },
+            {
+                question: "A researcher uses PCR to amplify a gene of interest that will be inserted into a plasmid vector. Which of the following statements about cloning PCR-amplified DNA fragments is correct?",
+                options: ["PCR-amplified DNA fragments must be phosphorylated at both ends before they can be amplified by PCR.", "Restriction enzyme recognition sequences can be incorporated into the 5' ends of PCR primers to facilitate directional cloning of the amplified fragment.", "PCR amplification guarantees that the resulting DNA fragment will be inserted into the plasmid in the correct orientation.", "PCR-amplified DNA fragments can only be cloned into plasmids using blunt-end ligation.", "PCR-amplified DNA fragments cannot be cloned into plasmids because they lack a replication origin."],
+                correct: "Restriction enzyme recognition sequences can be incorporated into the 5' ends of PCR primers to facilitate directional cloning of the amplified fragment."
+            },
+            {
+                question: "In the laboratory, recombinant plasmids are commonly introduced into E. coli cells by:",
+                options: ["add the DNA to bacteria that have been treated with lysozyme to produce \"holes\" in the cell wall.", "microinjecting plasmid DNA into the bacterial cells.", "bombardment of bacteria with microparticles made of gold or tungsten that are coated with plasmid DNA.", "mixing plasmid DNA with an extract of broken bacterial cells.", "exposing bacteria to a salt solution (e.g. CaCl2) and applying heat shock in the presence of plasmid DNA."],
+                correct: "exposing bacteria to a salt solution (e.g. CaCl2) and applying heat shock in the presence of plasmid DNA."
+            },
+            {
+                question: "How many DNA bands would you observe in an ethidium bromide-stained electrophoresis gel if you digested the following plasmid with NdeI, EcoRI, and StyI? (Refer to the provided plasmid map)",
+                options: ["1", "2", "3", "4", "5"],
+                correct: "3",
+                image: "Quiz4Question4.png"
+            },
+            // From Quiz Image 9
+            {
+                question: "The following shows the cleavage sites of several restriction endonucleases. You cut a plasmid vector using the PciI restriction nuclease. Which of the other restriction endonucleases can generate an insert fragment that can be directly ligated into this PciI-digested vector with the addition of only DNA ligase and ATP?",
+                options: ["MmeI", "HindIII", "NspV", "NcoI"],
+                correct: "NcoI",
+                image: "Quiz4Question5.png"
+            },
+            {
+                question: "Which of the following sequences is unlikely to be recognized by a type II restriction enzyme?",
+                options: ["GAATTC", "CTAATC", "GGGGCCCC", "CTGCAG", "All of the sequences shown are likely restriction sites"],
+                correct: "CTAATC"
+            },
+            {
+                question: "The recognition sites of some restriction enzymes are shown below in the potential answers. Which will produce 3' single-stranded overhangs or \"sticky\" 3' ends?",
+                options: ["SalI, G↓TCGAC", "SmaI, CCC↓GGG", "PstI, CTGCA↓G", "both SalI and PstI", "all the enzymes shown will leave 3' \"sticky\" ends"],
+                correct: "PstI, CTGCA↓G"
+            },
+            {
+                question: "A researcher wants to clone a gene into an expression vector so that the gene is inserted in the correct orientation relative to the promoter. Which of the following strategies would be most effective?",
+                options: ["Ligate the gene into the plasmid without restriction digestion and screen the resulting colonies by colony PCR for the correct orientation.", "Digest the gene and the plasmid with the same restriction enzyme and use DNA ligase to join the fragments.", "Use a plasmid containing multiple copies of the same restriction enzyme recognition sequence to increase the probability of gene insertion.", "Treat the linearized plasmid with alkaline phosphatase to ensure that the gene is inserted in the correct orientation.", "Use two different restriction enzymes that generate distinct sticky ends, digesting both the gene and the plasmid with these enzymes."],
+                correct: "Use two different restriction enzymes that generate distinct sticky ends, digesting both the gene and the plasmid with these enzymes."
+            },
+            // From Quiz Image 10
+            {
+                question: "Fragile X syndrome is caused by expansion of a trinucleotide repeat in the 5' UTR of the FMR-1 gene. Trinucleotide repeat expansions are a type of simple sequence repeat (SSR). Which of the following is the simplest way to detect this expansion?",
+                options: ["PCR using genomic DNA as template and two primers, one complementary to the repeat region and the other complementary to unique sequence, followed by gel electrophoresis", "Whole-genome sequencing", "Direct exome sequencing using a microarray", "PCR using genomic DNA as template and forward and reverse primers that are complementary to the repeats, followed by gel electrophoresis", "PCR using two primers that are complementary to unique sequences on either side of the repeat region, followed by gel electrophoresis"],
+                correct: "PCR using two primers that are complementary to unique sequences on either side of the repeat region, followed by gel electrophoresis"
+            },
+            {
+                question: "What process uses fluorescently tagged deoxynucleoside triphosphates?",
+                options: ["Illumina sequencing", "cDNA synthesis", "polymerase chain reaction", "Gibson assembly cloning", "Oxford nanopore sequencing"],
+                correct: "Illumina sequencing"
+            },
+            {
+                question: "What is a reference sequence (RefSeq)?",
+                options: ["A program to compare genome sequences.", "A program that identifies open reading frames.", "A constantly updated collection of DNA sequences from all species that give the latest information for bioinformatic studies.", "A single, complete, annotated version of a species' genomic DNA sequence that can be accessed for bioinformatic studies."],
+                correct: "A single, complete, annotated version of a species' genomic DNA sequence that can be accessed for bioinformatic studies."
+            },
+            {
+                question: "In a worm genome, the gene meg-1 is adjacent to the gene meg-2, and they are transcribed from the same template strand. These two genes encode proteins with largely identical amino acid sequences, although meg-1 has additional sequences not found in meg-2. The most likely explanation for how these two genes evolved is:",
+                options: ["alternative splicing", "de novo gene formation", "chromosomal inversion", "exon shuffling", "gene duplication and divergence"],
+                correct: "gene duplication and divergence"
+            },
+            // From Quiz Image 11
+            {
+                question: "Which of the following statements correctly distinguishes Illumina sequencing from Oxford Nanopore sequencing?",
+                options: ["Illumina sequencing produces longer reads than Oxford Nanopore sequencing but has higher error rates.", "Both Illumina and Oxford Nanopore sequencing require PCR amplification during signal detection and use reversible terminator chemistry.", "Illumina sequencing relies on sequencing-by-synthesis with fluorescently labeled nucleotides, while Oxford Nanopore sequencing measures changes in electrical current as nucleic acids pass through a protein nanopore.", "Illumina sequencing detects changes in ionic current as DNA passes through a nanopore, while the Oxford Nanopore sequencing relies on sequencing-by-synthesis and fluorescently labeled nucleotides."],
+                correct: "Illumina sequencing relies on sequencing-by-synthesis with fluorescently labeled nucleotides, while Oxford Nanopore sequencing measures changes in electrical current as nucleic acids pass through a protein nanopore."
+            },
+            {
+                question: "In order to perform DNA sequencing as developed by Fred Sanger, the following reagents must be included:",
+                options: ["DNA template, dNTPs, DNA Polymerase, restriction endonuclease", "DNA template, primers flanking the region of interest, dNTPs, DNA Polymerase", "DNA template, one primer, dideoxyNTPs, DNA Polymerase", "DNA template, primers flanking the region of interest, dNTPs, DNA Ligase", "DNA template, one primer, dNTPs, dideoxyNTPs, DNA Polymerase"],
+                correct: "DNA template, one primer, dNTPs, dideoxyNTPs, DNA Polymerase"
+            },
+            {
+                question: "What is the difference between orthologous genes (orthologs) and paralogous genes (paralogs)?",
+                options: ["Orthologs are in the same species; paralogs are in different species", "Orthologs are homologous sequences; paralogs are analogous sequences", "Orthologs are more similar in sequence than paralogs", "Orthologs are in different species; paralogs are in the same species"],
+                correct: "Orthologs are in different species; paralogs are in the same species"
+            },
+            // Added Quiz 5 Question 5
+            {
+                question: "The following is a DNA sequencing gel using the Sanger method where the different dideoxynucleotides have fluorescent labels that cause them to emit a different colour. In this case A = reddish orange, T = green, G = purple and C = black. Based on the image of the gel, what was the sequence of the template strand?",
+                options: ["5'-GACAAGCTTCGTACCAACAGGTCT-3'", "5'-CTGTTTCGAAGCATGGTTGTCCAGA-3'", "5'-TCTGGACAACCATGCTTCGAACAG-3'", "5'-AGACCTGTTGGTACGAAGCTTGTC-3'"],
+                correct: "5'-TCTGGACAACCATGCTTCGAACAG-3'",
+                image: "Quiz5Question5.png"
+            }
+        ];
+
+        // --- Shuffle Function (Fisher-Yates) ---
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex !== 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // --- Initialize MCQs ---
+        function initMCQs() {
+            const container = document.getElementById('mcq-container');
+            container.innerHTML = '';
+
+            // Shuffle the questions array
+            const shuffledQuestions = shuffle([...mcqs]);
+
+            shuffledQuestions.forEach((q, index) => {
+                // Shuffle options for each question
+                const shuffledOptions = shuffle([...q.options]);
+
+                // Create card
+                const card = document.createElement('div');
+                card.className = 'mcq-card';
+
+                // Question text
+                const questionText = document.createElement('div');
+                questionText.className = 'mcq-question';
+                questionText.textContent = `${index + 1}. ${q.question}`;
+                card.appendChild(questionText);
+
+                // Add Image if it exists
+                if (q.image) {
+                    const img = document.createElement('img');
+                    img.src = q.image;
+                    img.alt = "";
+                    img.className = 'mcq-image';
+                    card.appendChild(img);
+                }
+
+                // Options container
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'mcq-options';
+
+                shuffledOptions.forEach(opt => {
+                    const optDiv = document.createElement('div');
+                    optDiv.className = 'mcq-option';
+                    optDiv.textContent = opt;
+
+                    optDiv.addEventListener('click', function() {
+                        // Disable all options in this question
+                        const allOptions = optionsContainer.querySelectorAll('.mcq-option');
+                        allOptions.forEach(o => o.classList.add('disabled'));
+
+                        // Check if correct
+                        if (opt === q.correct) {
+                            this.classList.add('correct');
+                        } else {
+                            this.classList.add('wrong');
+                            // Highlight the correct answer
+                            allOptions.forEach(o => {
+                                if (o.textContent === q.correct) {
+                                    o.classList.add('correct');
+                                }
+                            });
+                        }
+                    });
+
+                    optionsContainer.appendChild(optDiv);
+                });
+
+                card.appendChild(optionsContainer);
+                container.appendChild(card);
+            });
+        }
+
+        // --- Initialize Practice Mode Section ---
+        function initPracticeSection() {
+            const practiceContainer = document.getElementById('practice-container');
+            const textSection = document.getElementById('text-section');
+
+            // Clone the content of the text section, skipping the section title
+            Array.from(textSection.children).forEach(child => {
+                if (child.classList && child.classList.contains('section-title')) return;
+                practiceContainer.appendChild(child.cloneNode(true));
+            });
+
+            // Add input fields and "Show Answer" buttons to each accordion item with an answer box
+            practiceContainer.querySelectorAll('.accordion-content').forEach(content => {
+                const answerBox = content.querySelector('.answer-box');
+                if (!answerBox) return;
+
+                // Create textarea
+                const textarea = document.createElement('textarea');
+                textarea.className = 'user-answer-input';
+                textarea.placeholder = 'Type your answer here...';
+                textarea.rows = 4;
+
+                // Create button container
+                const btnContainer = document.createElement('div');
+                btnContainer.className = 'answer-btn-container';
+
+                const showBtn = document.createElement('button');
+                showBtn.className = 'show-answer-btn';
+                showBtn.textContent = 'Show Correct Answer';
+
+                const clearBtn = document.createElement('button');
+                clearBtn.className = 'clear-answer-btn';
+                clearBtn.textContent = 'Clear';
+
+                btnContainer.appendChild(showBtn);
+                btnContainer.appendChild(clearBtn);
+
+                // Insert textarea and buttons before the answer box
+                answerBox.parentNode.insertBefore(textarea, answerBox);
+                answerBox.parentNode.insertBefore(btnContainer, answerBox);
+
+                // Hide answer box initially
+                answerBox.style.display = 'none';
+
+                // Toggle show/hide answer
+                showBtn.addEventListener('click', function() {
+                    if (answerBox.style.display === 'none') {
+                        answerBox.style.display = 'block';
+                        showBtn.textContent = 'Hide Correct Answer';
+                        showBtn.classList.add('revealed');
+                    } else {
+                        answerBox.style.display = 'none';
+                        showBtn.textContent = 'Show Correct Answer';
+                        showBtn.classList.remove('revealed');
+                    }
+                });
+
+                // Clear textarea
+                clearBtn.addEventListener('click', function() {
+                    textarea.value = '';
+                    textarea.focus();
+                });
+            });
+        }
+
+        // --- Accordion Toggle ---
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            item.classList.toggle('active');
+        }
+
+        // --- Tab Switching ---
+        function switchTab(tabId) {
+            // Hide all sections
+            document.getElementById('mcq-section').style.display = 'none';
+            document.getElementById('text-section').style.display = 'none';
+            document.getElementById('practice-section').style.display = 'none';
+
+            // Show selected section
+            document.getElementById(tabId).style.display = 'block';
+
+            // Update button styles
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Add active class to clicked button (find by onclick attr)
+            const activeBtn = Array.from(buttons).find(btn => btn.getAttribute('onclick').includes(tabId));
+            if (activeBtn) activeBtn.classList.add('active');
+        }
+
+        // --- Run on Load ---
+        window.onload = function() {
+            initMCQs();
+            initPracticeSection();
+        };
+    </script>
+</body>
+</html>
